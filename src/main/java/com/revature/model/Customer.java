@@ -1,92 +1,96 @@
 package com.revature.model;
 
 public class Customer {
-	private int customerID;
-	private String firstName, lastName;
-	private String street, city, state;
-	private int zipcode;
-	private String email;
-	private int phoneNumber;
+	private int userID;
+	private String userName;
+	private String passWord;
+	
+	String firstName;
+	String lastName;
+	
+	String email;
+	int number;
 	
 	public Customer() {
-		customerID = 0;
+		userID = 0;
+		userName = null;
+		passWord = null;
 		firstName = null;
 		lastName = null;
-		street = null;
-		city = null;
-		state = null;
-		zipcode = 0;
 		email = null;
-		phoneNumber = 0;
-	}
-
-	public Customer(int customerID, String firstName, String lastName, 
-			String street, String city, String state, int zipcode, 
-			String email, int phoneNumber) 
-	{
-		this.customerID = customerID;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.street = street;
-		this.city = city;
-		this.state = state;
-		this.zipcode = zipcode;
-		this.email = email;
-		this.phoneNumber = phoneNumber;
+		number = 0;
 	}
 	
-	public int getCustomerID() {
-		return customerID;
+	public Customer(String userName, String passWord) {
+		this.userName = userName;
+		this.passWord = passWord;
 	}
-	public void setCustomerID(int customerID) {
-		this.customerID = customerID;
+
+	public Customer (int userID, String userName, String passWord,
+	String firstName, String lastName, String email, int number) {
+		this.userID = userID;
+		this.userName = userName;
+		this.passWord = passWord;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.number = number;
 	}
+
+	public int getUserID() {
+		return userID;
+	}
+
+	public void setUserID(int userID) {
+		this.userID = userID;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getPassWord() {
+		return passWord;
+	}
+
+	public void setPassWord(String passWord) {
+		this.passWord = passWord;
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+
 	public String getLastName() {
 		return lastName;
 	}
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	public String getStreet() {
-		return street;
-	}
-	public void setStreet(String street) {
-		this.street = street;
-	}
-	public String getCity() {
-		return city;
-	}
-	public void setCity(String city) {
-		this.city = city;
-	}
-	public String getState() {
-		return state;
-	}
-	public void setState(String state) {
-		this.state = state;
-	}
-	public int getZipcode() {
-		return zipcode;
-	}
-	public void setZipcode(int zipcode) {
-		this.zipcode = zipcode;
-	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public int getPhoneNumber() {
-		return phoneNumber;
+
+	public int getNumber() {
+		return number;
 	}
-	public void setPhoneNumber(int phoneNumber) {
-		this.phoneNumber = phoneNumber;
+
+	public void setNumber(int number) {
+		this.number = number;
 	}
+
 }

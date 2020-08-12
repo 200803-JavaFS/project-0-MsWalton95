@@ -1,49 +1,73 @@
 package com.revature.model;
 
 public class Account {
-	int accountNumber;
-	String accountName;
-	int balance;
-	String type;
+	private int accNumber;
+	private String accName;
+	private double balance;
+	private String accType;
+	private boolean isApproved;
 	
 	public Account() {
-		accountNumber = 0;
-		accountName = null;
+		accNumber = 0;
+		accName = null;
 		balance = 0;
-		type = null;
+		accType = null;
+		isApproved = false;
+	}
+	
+	public Account(String accName, String accType, boolean isApproved) {
+		this.accName = accName;
+		this.accType = accType;
+		this.isApproved = isApproved;
 	}
 
-	public Account(int accountNumber, String accountName, int balance, String type) {
-		this.accountNumber = accountNumber;
-		this.accountName = accountName;
+	public Account(int accNumber, String accName, double balance, String accType, boolean isApproved) {
+		this.accNumber = accNumber;
+		this.accName = accName;
 		this.balance = balance;
-		this.type = type;
+		this.accType = accType;
+		this.isApproved = isApproved;
 	}
-	
-	public int getAccountNumber() {
-		return accountNumber;
+
+	public int getAccNumber() {
+		return accNumber;
 	}
-	public void setAccountNumber(int accountNumber) {
-		this.accountNumber = accountNumber;
+
+	public void setAccNumber(int accNumber) {
+		this.accNumber = accNumber;
 	}
-	public String getAccountName() {
-		return accountName;
+
+	public String getAccName() {
+		return accName;
 	}
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
+
+	public void setAccName(String accName) {
+		this.accName = accName;
 	}
-	public int getBalance() {
+
+	public double getBalance() {
 		return balance;
 	}
-	public void setBalance(int balance) {
+
+	public void setBalance(double balance) {
 		this.balance = balance;
 	}
-	public String getType() {
-		return type;
+
+	public String getAccType() {
+		return accType;
 	}
-	public void setType(String type) {
-		this.type = type;
+
+	public void setAccType(String accType) {
+		this.accType = accType;
 	}
-	
-	
+
+	public boolean isApproved() {
+		return isApproved;
+	}
+
+	public void setApproved(boolean isApproved) {
+		this.isApproved = isApproved;
+	}
+
+
 }

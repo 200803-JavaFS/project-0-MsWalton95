@@ -1,69 +1,54 @@
 package com.revature.utility;
 
+import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.revature.model.*;
 import com.revature.services.*;
 
 public class Driver {
-	CustomerService c = new CustomerService();
-	EmployeeService e = new EmployeeService();
-	AdminService a = new AdminService();
-	UserService u = new UserService();
-	
-	Scanner sc = new Scanner(System.in);
-	
-	public void intro() {
-		System.out.println(
-				" _._._                       _._._ " + "\n" + 
-		        "_|   |_                     _|   |_" + "\n" +
-				"| ... |_._._._._._._._._._._| ... |" + "\n" +
-				"| ||| |  o REVATURE BANK o  | ||| |" + "\n" +
-				"| ''' |  '''    '''    '''  | ''' |" + "\n" +
-				"|[-|-]| [-|-]  [-|-]  [-|-] |[-|-]|" + "\n" +
-				"|     |---------------------|     |" + "\n" +
-				"| ''' |  '''    '''    '''  | ''' |" + "\n" +
-				"|[-|-]|  :::   .-'-.   :::  |[-|-]|" + "\n" +
-				"|     | |~|~|  |_|_|  |~|~| |     |" + "\n" +
-				"|_____|_|_|_|__|_|_|__|_|_|_|_____|" + "\n"
-		);
-		System.out.println("     Welcome to Revature Bank");
-		System.out.println("\n" + "-----------------------------------" + "\n");
-		
-		System.out.println("Choose your account \n");
-		System.out.println("1. Client \n" + "2. Employee \n" + "3. Administration");
-		System.out.println("\n" + "-----------------------------------" + "\n");
-	}
-		
-	public void introAccount() {
-		try {
-			int choice = sc.nextInt();
-			
-			switch(choice) {
-				case 1: 
-					c.login(); break;
-				case 2: 
-					e.login(); break;
-				case 3: 
-					a.login(); break;
-				default: 
-					System.out.println("Wrong input. Try again");
-			}
-		}catch(InputMismatchException e) {
-			System.out.println("Invalid Input");
-		}
-	}
-	
-	private static final Logger log = LogManager.getLogger(Driver.class);
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException{
+		CustomerService cs = new CustomerService();
+		AccountService as = new AccountService();
+		EmployeeService es = new EmployeeService();
+		ConsoleDriver cd = new ConsoleDriver();
 		
-		Driver d = new Driver();
-		d.intro();
-		d.introAccount();
+		cd.begin();
 		
+//		System.out.println("-------------------------All Customers------------------------------");
+//		es.getAllCustomers();
+//		System.out.println("-------------------------All Accounts------------------------------");
+		//es.getAllAccounts();
+//		System.out.println("-------------------------All Pending Accounts------------------------------");
+//		es.getAllPendingAccounts();
+//		System.out.println("-------------------------All Open Accounts------------------------------");
+//		es.getAllOpenAccounts();
+//		System.out.println("-------------------------Deny Accounts------------------------------");		
+//		es.denyAccountByID();
+//		System.out.println("-------------------------Approve Accounts------------------------------");
+//		es.approveAccountByID();
+		
+//		System.out.println("-------------------------Customer By ID------------------------------");
+//		as.getCustomerByID();
+//		System.out.println("-------------------------Account By ID------------------------------");
+//		as.getAccountByID();
+//		System.out.println("-------------------------Open Account By ID------------------------------");
+//		as.getOpenAccountsByID();
+//		System.out.println("-------------------------Pending Account By ID------------------------------");
+//		as.getPendingAccountsByID();		
+//		System.out.println("-------------------------Create Account By ID------------------------------");
+//		as.createAccountByID();
+//		System.out.println("-------------------------Delete Account By ID------------------------------");
+//		as.deleteAccountByID();
+		//as.withdraw();
+		
+
+		
+		//cd.begin();
 	}
 }

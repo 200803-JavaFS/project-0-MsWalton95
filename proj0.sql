@@ -1,4 +1,4 @@
-DROP TABLE account ;
+
 
 --------------CUSTOMER--------------
 
@@ -29,7 +29,12 @@ CREATE TABLE account(
 	customer_fk INTEGER REFERENCES customer(customer_id)
 )
 
-INSERT INTO account(account_name, account_type ) VALUES('name','Saving' );
+
+UPDATE account SET balance= balance+300  WHERE customer_fk=4 AND account_name='vacation';COMMIT;
+
+ROLLBACK;
+
+SELECT * FROM account WHERE approved=false
 
 
 INSERT INTO account(account_name, balance, account_type, approved, customer_fk) VALUES

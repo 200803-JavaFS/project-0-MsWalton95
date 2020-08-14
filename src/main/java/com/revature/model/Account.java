@@ -1,6 +1,7 @@
 package com.revature.model;
 
 public class Account {
+	private int accID;
 	private int accNumber;
 	private String accName;
 	private double balance;
@@ -8,6 +9,7 @@ public class Account {
 	private boolean isApproved;
 	
 	public Account() {
+		accID = 0;
 		accNumber = 0;
 		accName = null;
 		balance = 0;
@@ -21,12 +23,29 @@ public class Account {
 		this.isApproved = isApproved;
 	}
 
-	public Account(int accNumber, String accName, double balance, String accType, boolean isApproved) {
+	public Account(int accID, int accNumber, String accName, double balance, String accType, boolean isApproved) {
+		this.accID = accID;
 		this.accNumber = accNumber;
 		this.accName = accName;
 		this.balance = balance;
 		this.accType = accType;
 		this.isApproved = isApproved;
+	}
+	
+	
+
+	@Override
+	public String toString() {
+		return "Account ID: " + accID + ", Account Number: " + accNumber + ", Account Name: " + accName + ", Balance:" + balance + ", Account Type:"
+				+ accType + ", Approved: " + isApproved;
+	}
+
+	public int getAccID() {
+		return accID;
+	}
+
+	public void setAccID(int accID) {
+		this.accID = accID;
 	}
 
 	public int getAccNumber() {
@@ -41,8 +60,8 @@ public class Account {
 		return accName;
 	}
 
-	public void setAccName(String accName) {
-		this.accName = accName;
+	public String setAccName(String accName) {
+		return this.accName = accName;
 	}
 
 	public double getBalance() {

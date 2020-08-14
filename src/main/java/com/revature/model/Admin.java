@@ -6,7 +6,9 @@ public class Admin {
 	private String passWord;
 	
 	public Admin() {
-
+		this.adminID = 0;
+		this.userName = null;
+		this.passWord = null;
 	}
 	
 	public Admin(int adminID, String userName, String passWord) {

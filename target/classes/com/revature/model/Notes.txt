@@ -1,64 +1,40 @@
---------------Customer----------------
+--------------Customer----------------	    
+Register Login
+Apply to Open account
+Deposit Account
+Withdraw Account
+Transfer Account
+(Optional) Joint Account
 
-	Customers of the bank should be able to register 
-	with a username and password, and apply to open an account.
-	
-	    Stretch Goal: Customers should be able to 
-	    apply for joint accounts
-	
-	Once the account is open, customers should be able 
-	to withdraw, deposit, and transfer funds between accounts
-	
-	    All basic validation should be done, 
-	    such as trying to input negative amounts, 
-	    overdrawing from accounts etc.
+View Customer
+Edit Customer
 
 --------------Employee----------------
+View Account - A
+View All Account -A
+Deny Account
+Approve Account
 
-Employees of the bank should be able to view all 
-of their customers information. This includes:
+View Customer -A
+View All Customer -A
 
-    Account information
-    Account balances
-    Personal information
-
-Employees should be able to approve/deny open applications 
-for accounts
-
+ADD
+All Pending Account -> Deny/Approve Option
+Transaction History
 --------------Bank Admin----------------
 
-Bank admins should be able to view and edit all accounts. 
+View Account
+View All Account
+Edit All Account
+Deny Account
+Approve Account
+Deposit Account
+Withdraw Account
+Transfer Account
+Cancel Account
 
-Approving/denying accounts
-withdrawing, depositing, transferring from all accounts
-canceling accounts
+View Customer
+View All Customer
+Edit Customer
 
 
-
-
-
-
-
-
-/* Introduction to Bank
- * 
- * Sign In, Create Username, Logout
- * 
- * Choose which account to use
- * 		Client
- * 			- Create Account
- * 			- Sign In
- * 				- List of username and password that is allowed to enter
- * 					- Make sure the username matches the password
- * 			- Client Account
- * 				- Show the userID = username's account
- * 				- Manage Account, Edit Personal Info, LogOut
- * 					- Manage Account
- * 
- * 			
- * 
- * 		Employee
- * 
- * 		Administrator
- * 
- */

@@ -1,15 +1,16 @@
 package com.revature.model;
 
 public class Customer {
+
 	private int userID;
 	private String userName;
 	private String passWord;
 	
-	String firstName;
-	String lastName;
+	private String firstName;
+	private String lastName;
 	
-	String email;
-	int number;
+	private String email;
+	private long number;
 	
 	public Customer() {
 		userID = 0;
@@ -27,7 +28,7 @@ public class Customer {
 	}
 
 	public Customer (int userID, String userName, String passWord,
-	String firstName, String lastName, String email, int number) {
+	String firstName, String lastName, String email, long number) {
 		this.userID = userID;
 		this.userName = userName;
 		this.passWord = passWord;
@@ -36,7 +37,12 @@ public class Customer {
 		this.email = email;
 		this.number = number;
 	}
-
+	
+	@Override
+	public String toString() {
+		return "[Name: " + lastName + ", " +firstName + "\t Email: " + email + "\t Phone Number: " + number
+				+ "]";
+	}
 	public int getUserID() {
 		return userID;
 	}
@@ -85,11 +91,11 @@ public class Customer {
 		this.email = email;
 	}
 
-	public int getNumber() {
+	public long getNumber() {
 		return number;
 	}
 
-	public void setNumber(int number) {
+	public void setNumber(long number) {
 		this.number = number;
 	}
 

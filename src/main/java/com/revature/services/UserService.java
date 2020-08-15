@@ -12,9 +12,9 @@ public class UserService {
 /*---------------------------------------------------------------------------------------------------------*/	
 	
 	public void signin() {
-		System.out.println("\n" + "-----------------------------------" + "\n");
-		System.out.println("1. Log in \t" + "2. Exit");
-		System.out.println("\n" + "-----------------------------------" + "\n");
+		System.out.println("\n ----------------------------------- \n");
+		System.out.println(" 1. Log in \t" + "2. Exit");
+		System.out.println("\n ----------------------------------- \n");
 		
 		int choice = sc.nextInt();
 		option(choice);
@@ -23,7 +23,7 @@ public class UserService {
 /*---------------------------------------------------------------------------------------------------------*/	
 	
 	public void login() {
-		System.out.println("\n" + "-----------------------------------" + "\n");
+		System.out.println("\n ----------------------------------- \n");
 		try {
 			System.out.print("Username: ");
 			String username = sc.next();
@@ -43,9 +43,9 @@ public class UserService {
 /*---------------------------------------------------------------------------------------------------------*/	
 	
 	public void retry() {
-		System.out.println("\n" + "-----------------------------------" + "\n");
-		System.out.println("1. Continue \t" + "2. Exit");
-		System.out.println("\n" + "-----------------------------------" + "\n");
+		System.out.println("\n ----------------------------------- \n");
+		System.out.println(" 1. Continue \t" + "2. Exit");
+		System.out.println("\n ----------------------------------- \n");
 		
 		try {
 			int choice = sc.nextInt();
@@ -69,17 +69,17 @@ public class UserService {
 /*---------------------------------------------------------------------------------------------------------*/	
 	
 	public void homePage() {
-		System.out.println("\n" + "-----------------------------------" + "\n");
-		System.out.println("1. Customer Info \n" + "2. Customer Account \n" + "3. Customer Transactions \n" + "4. Log Out" );
-		System.out.println("\n" + "-----------------------------------" + "\n");
+		System.out.println("\n ----------------------------------- \n");
+		System.out.println(" 1. Customer Info \n 2. Customer Account \n 3. Customer Transactions \n" + "4. Log Out" );
+		System.out.println("\n ----------------------------------- \n");
 	}
 	
 /*---------------------------------------------------------------------------------------------------------*/	
 	
 	public void logout() {
-		System.out.println("\n" + "-----------------------------------" + "\n");
-		System.out.println("Thank You For Using Revature Bank!");
-		System.out.println("\n" + "-----------------------------------" + "\n");
+		System.out.println("\n ----------------------------------- \n");
+		System.out.println(" Thank You For Using Revature Bank!");
+		System.out.println("\n ----------------------------------- \n");
 		System.exit(0);
 	}
 	

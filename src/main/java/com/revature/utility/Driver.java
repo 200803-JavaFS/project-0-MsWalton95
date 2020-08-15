@@ -18,7 +18,7 @@ public class Driver {
 		EmployeeService es = new EmployeeService();
 		ConsoleDriver cd = new ConsoleDriver();
 		
-		cd.begin();
+		//cd.begin();
 		
 //		System.out.println("-------------------------All Customers------------------------------");
 //		es.getAllCustomers();
@@ -45,8 +45,8 @@ public class Driver {
 //		as.createAccountByID();
 //		System.out.println("-------------------------Delete Account By ID------------------------------");
 //		as.deleteAccountByID();
-		//as.withdraw();
 		
+		cs.updateCustomer(5);
 
 		
 		//cd.begin();

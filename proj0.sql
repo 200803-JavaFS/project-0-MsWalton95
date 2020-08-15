@@ -1,5 +1,4 @@
 
-
 --------------CUSTOMER--------------
 
 CREATE TABLE customer (
@@ -16,8 +15,12 @@ INSERT INTO customer (user_name, pass_word, first_name, last_name, email, phone_
 ('customer2', 'customer2', 'Miles', 'Edgeworth', 'mitsurugi@aceattorney.com', 5554561234),
 ('customer3', 'customer3', 'Maya', 'Fey', 'mediumspirit@aceattorney.com', 5557891234);
 
-INSERT INTO customer (user_name, pass_word, first_name, last_name, email, phone_number) VALUES
-('customer5','customer5','John','Doe','johndoe@gmail.com',123456789);
+INSERT INTO customer (first_name, last_name, email, phone_number) VALUES
+('Jane','Doe','janedoe@gmail.com',1234561234);
+
+UPDATE customer SET user_name='customer7', pass_word='customer7' WHERE customer_id=7;
+
+UPDATE customer SET email='janejane@gmail.com', phone_number=1002001234 WHERE customer_id=5;
 
 --------------ACCOUNT--------------
 CREATE TABLE account(
@@ -29,6 +32,7 @@ CREATE TABLE account(
 	customer_fk INTEGER REFERENCES customer(customer_id)
 )
 
+SELECT count(balance), sum(balance) FROM account WHERE customer_fk=2;
 
 UPDATE account SET balance= balance+300  WHERE customer_fk=4 AND account_name='vacation';COMMIT;
 

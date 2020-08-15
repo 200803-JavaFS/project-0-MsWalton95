@@ -1,4 +1,8 @@
---------------Customer----------------	    
+--------------------------------------
+--------------Customer----------------	
+--------------------------------------  
+FUNCTION
+--------  
 Register Login
 Apply to Open account
 Deposit Account
@@ -6,10 +10,30 @@ Withdraw Account
 Transfer Account
 (Optional) Joint Account
 
-View Customer
+View Customer -A
 Edit Customer
 
+LAYOUT
+------
+Under Customer Info -> View Customer, Update Customer
+Under Customer Account -> View Accounts
+	View Account -> Accounts, Open, Pending
+	Edit Account -> Update, Cancel
+Under Transaction -> Transaction History, Deposit, Withdraw, Transfer
+
+NEED FIX
+--------
+Register Login
+New Account
+Deposit/Withdraw/Transfer
+Edit Customer
+
+--------------------------------------
 --------------Employee----------------
+--------------------------------------
+
+FUNCTION
+--------
 View Account - A
 View All Account -A
 Deny Account
@@ -17,15 +41,31 @@ Approve Account
 
 View Customer -A
 View All Customer -A
+View Transaction History
 
-ADD
-All Pending Account -> Deny/Approve Option
+LAYOUT
+-------
+Customer Info -> View All Customers, View Customers//
+Customer Account -> View All Accounts, View Account, Update Account	
+	View All Accounts -> All Accounts, All Open, All Pending
+	View Account -> Accounts, Open, Pending
+	Update Account -> Approve, Deny
+Customer Transactions -> All Transaction, Transaction History
+	
+NEED FIX
+-------
+Deny/Approve Account
 Transaction History
---------------Bank Admin----------------
 
-View Account
-View All Account
-Edit All Account
+----------------------------------------
+--------------Bank Admin----------------
+----------------------------------------
+
+FUNCTIONS
+---------
+View Account - A
+View All Account - A
+Edit Account
 Deny Account
 Approve Account
 Deposit Account
@@ -33,8 +73,19 @@ Withdraw Account
 Transfer Account
 Cancel Account
 
-View Customer
-View All Customer
+View Customer -A
+View All Customer -A
 Edit Customer
 
+LAYOUT
+------
+	Under Customer Info -> View All Customers, View Customers, Update Customer
+	Under Customer Account -> View All Accounts, View Account, Update Account
+		View All Accounts -> All Accounts, All Open, All Pending
+		View Account -> Accounts, Open, Pending
+		Update Account -> Approve, Deny, Update, Cancel
+	Under Customer Transaction ->All Transactions, Transaction History, Deposit, Withdraw, Transfer
 
+NEED FIX
+--------
+Cancel Account

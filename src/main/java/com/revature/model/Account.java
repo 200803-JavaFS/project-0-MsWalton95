@@ -36,8 +36,8 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "Account ID: " + accID + ", Account Number: " + accNumber + ", Account Name: " + accName + ", Balance:" + balance + ", Account Type:"
-				+ accType + ", Approved: " + isApproved;
+		return "[Account ID: " + accID + "\t Account Number: " + accNumber + "\t Account Name: " + accName + "\t Balance:" + balance + "\t Account Type:"
+				+ accType + "\t Approved: " + isApproved + "]";
 	}
 
 	public int getAccID() {

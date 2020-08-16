@@ -37,21 +37,18 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 /*---------------------------------------------------------------------------------------------------------*/	
 	/*DELETE, INSERT, UPDATE	
 /*---------------------------------------------------------------------------------------------------------*/	
-
-	public boolean updateAccountByID(int userID) {
-		try(Connection conn = ConnectionDAO.connect()){
-			
-			return true;
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}													
-/*---------------------------------------------------------------------------------------------------------*/	
 		
 	public boolean denyAccountByID(int userID) {
 		try(Connection conn = ConnectionDAO.connect()){
+			String sql="DELETE FROM account WHERE account_id=? AND approved=false AND customer_fk=?";
+			psmt = conn.prepareStatement(sql);
 			
+			System.out.print("Please enter account number: ");
+			int accID = sc.nextInt();
+			psmt.setInt(1, accID);
+			
+			psmt.setInt(2, userID);
+			psmt.execute();
 			return true;
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -62,7 +59,15 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 
 	public boolean approveAccountByID(int userID) {
 		try(Connection conn = ConnectionDAO.connect()){
-
+			String sql="UPDATE account SET approved=true WHERE account_id=? AND approved=false AND customer_fk=?;";
+			psmt = conn.prepareStatement(sql);
+			
+			System.out.print("Please enter account number: ");
+			int accID = sc.nextInt();
+			psmt.setInt(1, accID);
+			
+			psmt.setInt(2, userID);
+			psmt.execute();
 			return true;
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -86,7 +91,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 			List<Customer> customers = new ArrayList<Customer>();
 			
 			ResultSet rs = stmt.executeQuery(sql);
-			System.out.println("\n" + "-----------------------------------" + "\n");
+			System.out.println("\n ----------------------------------- \n");
 
 			while(rs.next()) {
 				c.setUserID(rs.getInt("customer_id"));
@@ -122,7 +127,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 			
 			ResultSet rs = stmt.executeQuery(sql);
 			
-			System.out.println("\n" + "-----------------------------------" + "\n");
+			System.out.println("\n ----------------------------------- \n");
 			while(rs.next()) {
 				a.setAccNumber(rs.getInt("account_id"));
 				a.setAccName(rs.getString("account_name"));
@@ -153,7 +158,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 			List<Account> accounts = new ArrayList<Account>();
 			
 			ResultSet rs = stmt.executeQuery(sql);
-			System.out.println("\n" + "-----------------------------------" + "\n");
+			System.out.println("\n ----------------------------------- \n");
 
 			while(rs.next()) {
 				a.setAccNumber(rs.getInt("account_id"));
@@ -186,7 +191,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 			List<Account> accounts = new ArrayList<Account>();
 			
 			ResultSet rs = stmt.executeQuery(sql);
-			System.out.println("\n" + "-----------------------------------" + "\n");
+			System.out.println("\n ----------------------------------- \n");
 			while(rs.next()) {
 				a.setAccNumber(rs.getInt("account_id"));
 				a.setAccName(rs.getString("account_name"));
@@ -199,7 +204,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 				System.out.println(a);
 			}
 			
-			log.info("\n"+"Retrieve All Open Accounts");
+			log.info("Retrieve All Open Accounts");
 			return accounts;
 			
 		}catch(SQLException e) {
@@ -219,7 +224,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 /*---------------------------------------------------------------------------------------------------------*/	
 
 	public void login() {
-		System.out.println("\n" + "-----------------------------------" + "\n");
+		System.out.println("\n ----------------------------------- \n");
 		try(Connection conn = ConnectionDAO.connect()) {
 			System.out.println("EMPLOYEE LOGIN \n");
 			System.out.print("Username: ");
@@ -360,10 +365,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 				getAccountOption();
 				break;
 			case 3: 
-				System.out.println("\n" + "-----------------------------------" + "\n");
-				System.out.print("Please enter customer ID: ");
-				int userID = sc.nextInt();
-				updateAccountByID(userID); 
+				updateAccountOption(); 
 				break;
 			case 4: 
 				homePage();
@@ -430,6 +432,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 			case 3:
 				as.getOpenAccountsByID(userID);
 				homePage();
+				break;
 			case 4: 
 				homePage(); 
 				break;
@@ -440,6 +443,36 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	}
 	
 /*---------------------------------------------------------------------------------------------------------*/	
+	public void updateAccountOption() {
+		System.out.println("\n" + "-----------------------------------" + "\n");
+		System.out.print("Please enter customer ID: ");
+		int userID = sc.nextInt();
+		System.out.println("\n" + "-----------------------------------" + "\n");
+		System.out.println(" 1. Approve Account \n 2. Deny Accounts \n 3. Exit" );
+		System.out.println("\n" + "-----------------------------------" + "\n");
+		
+		int choice = sc.nextInt();
+		
+		switch(choice) {
+			case 1: 
+				approveAccountByID(userID);
+				homePage();
+				break;
+			case 2: 
+				denyAccountByID(userID);
+				homePage();
+				break;
+			case 3:
+				homePage(); 
+				break;
+			default: 
+				System.out.println("Invalid input"); 
+				retry();
+		}
+	}
+	
+/*---------------------------------------------------------------------------------------------------------*/	
+
 	public void customerEdit() {
 		System.out.println("\n ----------------------------------- \n");
 		System.out.println("  1. Approve Account \n 2. Deny Account \n 3. Exit" );

@@ -22,6 +22,8 @@ UPDATE customer SET user_name='customer7', pass_word='customer7' WHERE customer_
 
 UPDATE customer SET email='janejane@gmail.com', phone_number=1002001234 WHERE customer_id=5;
 
+ALTER TABLE customer ADD UNIQUE(user_name);
+
 --------------ACCOUNT--------------
 CREATE TABLE account(
 	account_id SERIAL PRIMARY KEY,
@@ -32,21 +34,17 @@ CREATE TABLE account(
 	customer_fk INTEGER REFERENCES customer(customer_id)
 )
 
-SELECT count(balance), sum(balance) FROM account WHERE customer_fk=2;
+INSERT account(account_name, balance, account_type, approved, customer_fk) INTO VALUES(?,?,?,?,?)
 
-UPDATE account SET balance= balance+300  WHERE customer_fk=4 AND account_name='vacation';COMMIT;
+--SELECT customer_fk, SUM(balance) FROM account GROUP BY customer_fk ORDER BY customer_fk; --Show the amount for everything
 
-ROLLBACK;
+-- SELECT LOCALTIMESTAMP -- Add transaction
+-- 
+SELECT * FROM customer ORDER BY customer_id DESC LIMIT 1;
 
-SELECT * FROM account WHERE approved=false
+UPDATE account SET approved=true WHERE account_name='movie night' AND approved=false AND customer_fk=4;
 
-
-INSERT INTO account(account_name, balance, account_type, approved, customer_fk) VALUES
-('default', 100.00, 'Checkings', true, 1),
-('default', 1000.00, 'Checkings', true, 2),
-('fancy ascots', 100.00, 'Savings', true, 2),
-('default', 5.00, 'Checkings', true, 3),
-('burgers',0.00,'Savings', false, 3)
+DELETE FROM account WHERE account_name='vacation' AND approved=false AND customer_fk=4;
 
 --------------EMPLOYEE--------------
 CREATE TABLE employee(

@@ -5,6 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.InputMismatchException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.revature.model.Admin;
 import com.revature.model.Employee;
 import com.revature.utility.ConnectionDAO;
@@ -12,6 +15,189 @@ import com.revature.utility.ConnectionDAO;
 public class AdminService extends EmployeeService {
 	Admin a = new Admin();
 	
+	private static final Logger log = LogManager.getLogger(Admin.class);
+		
+/*---------------------------------------------------------------------------------------------------------*/	
+	public void updateAccountByID(int userID) {
+		try(Connection conn = ConnectionDAO.connect()){//Name/Balance/Type/Approved
+			System.out.println("\n ----------------------------------- \n");
+			System.out.println(" 1. Please enter Account Number");
+			System.out.println("\n ----------------------------------- \n");
+			
+			int accNumber = sc.nextInt();
+			
+			System.out.println("\n ----------------------------------- \n");
+			System.out.println(" 1. Account Name \n 2. Type \n 3. Approved \n 4. Exit");
+			System.out.println("\n ----------------------------------- \n");
+			
+			int choice = sc.nextInt();
+			switch(choice) {
+			case 1: 
+				String sql1 ="UPDATE account SET account_name=? WHERE customer_fk=? AND account_id=?;";
+				psmt = conn.prepareStatement(sql1);
+				System.out.println("\n ----------------------------------- \n");
+				System.out.print(" Update Account Name: ");
+				String accName = sc.next();
+				
+				if(accName.equals("default")) {
+					System.out.println("Cannot change to 'default' account");
+					homePage();
+				}else {
+				psmt.setString(1, accName);
+				}
+				psmt.setInt(2, userID);
+				psmt.setInt(3, accNumber);
+				psmt.execute();
+				
+				log.info("Account Name Updated");
+				homePage();
+				break;
+			case 2: 
+				String sql2 ="UPDATE account SET account_type=? WHERE customer_fk=? AND account_id=?;";
+				psmt = conn.prepareStatement(sql2);
+				
+				System.out.println("\n ----------------------------------- \n");
+				System.out.print(" Update Account Type \n");
+				System.out.println();
+				System.out.println(" 1. Checking \n 2. Savings \n 3. Exit");
+				System.out.println("\n ----------------------------------- \n");
+					int accType = sc.nextInt();
+					switch(accType) {
+					case 1:
+						psmt.setString(1, "Checkings");
+						break;
+					case 2:
+						psmt.setString(2, "Savings");
+						break;
+					default: System.out.println("Invalid Input");
+					}
+				psmt.setInt(2, userID);
+				psmt.setInt(3, accNumber);
+				psmt.execute();
+				log.info("Account Type Updated");
+				homePage();
+				break;
+			case 3: 
+				String sql3 ="UPDATE account SET approved=? WHERE customer_fk=? AND account_id=?;";
+				psmt = conn.prepareStatement(sql3);
+				
+				System.out.println("\n ----------------------------------- \n");
+				System.out.print(" Update Account Status");
+				System.out.println();
+				System.out.println(" 1. Deny \n 2. Approve \n 3. Exit");
+				System.out.println("\n ----------------------------------- \n");
+					int accStatus = sc.nextInt();
+					switch(accStatus) {
+					case 1:
+						psmt.setBoolean(1, false);
+						break;
+					case 2:
+						psmt.setBoolean(2, true);
+						break;
+					default: System.out.println("Invalid Input");
+					}
+				psmt.setInt(2, userID);
+				psmt.setInt(3, accNumber);
+				psmt.execute();
+				log.info("Account Status Updated");
+				homePage();
+				break;
+			case 4: 
+				homePage();
+				break;
+			default: 
+				System.out.println("Invalid Input");
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}catch(InputMismatchException ex) {
+			System.out.println("Invalid Input");
+		}
+	}
+/*---------------------------------------------------------------------------------------------------------*/	
+	public void updateCustomer(int userID) {
+		try(Connection conn = ConnectionDAO.connect()){
+			System.out.println("\n ----------------------------------- \n");
+			System.out.println(" 1. First Name \n 2. Last Name \n 3. Email \n 4. Phone Number \n 5. Password \n 6. Exit");
+			System.out.println("\n ----------------------------------- \n");
+			
+			int choice = sc.nextInt();
+			switch(choice) {
+			case 1: 
+				String sql1 ="UPDATE customer SET first_name=? WHERE customer_id=?;";
+				psmt = conn.prepareStatement(sql1);
+				System.out.println("\n ----------------------------------- \n");
+				System.out.print(" Update First Name: ");
+				String firstName = sc.next();
+				psmt.setString(1, firstName);
+				
+				log.info("First Name Updated");
+				break;
+			case 2: 
+				String sql2 ="UPDATE customer SET last_name=? WHERE customer_id=?;";
+				psmt = conn.prepareStatement(sql2);
+				
+				System.out.println("\n ----------------------------------- \n");
+				System.out.print(" Update Last Name: ");
+				
+				String lastName = sc.next();
+				psmt.setString(1, lastName);
+				
+				log.info(" Last Name Updated");
+				break;
+			case 3: 
+				String sql3 ="UPDATE customer SET email=? WHERE customer_id=?;";
+				psmt = conn.prepareStatement(sql3);
+				
+				System.out.println("\n ----------------------------------- \n");
+				System.out.print(" Update Email Address: ");
+				
+				String email = sc.next();
+				psmt.setString(1, email);
+				
+				log.info("Email Updated");
+				break;
+			case 4: 
+				String sql4 ="UPDATE customer SET phone_number=? WHERE customer_id=?;";
+				psmt = conn.prepareStatement(sql4);
+				
+				System.out.println("\n ----------------------------------- \n");
+				System.out.print(" Update Phone Number: ");
+				
+				long phone = sc.nextLong();
+				psmt.setLong(1, phone);
+				
+				log.info("Phone Number Updated");
+				break;
+			case 5: 
+				String sql5 ="UPDATE customer SET pass_word=? WHERE customer_id=?;";
+				psmt = conn.prepareStatement(sql5);
+				
+				System.out.println("\n ----------------------------------- \n");
+				System.out.print(" Update password: ");
+				
+				String password = sc.next();
+				psmt.setString(1, password);
+				
+				log.info("Password Updated");
+				break;
+			case 6: 
+				homePage();
+				break;
+			default: 
+				System.out.println("Invalid Input");
+			}
+			
+			psmt.setInt(2, userID);
+	
+			psmt.execute();
+			homePage();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}catch(InputMismatchException ex) {
+			System.out.println("Invalid Input");
+		}
+	}
 /*---------------------------------------------------------------------------------------------------------*/	
 	
 	public void cancelAccountByID() {}
@@ -21,11 +207,11 @@ public class AdminService extends EmployeeService {
 	public void login() {
 		System.out.println("\n ----------------------------------- \n");
 		try(Connection conn = ConnectionDAO.connect()) {
-			System.out.println("ADMINISTRATOR LOGIN \n");
-			System.out.print("Username: ");
+			System.out.println(" ADMINISTRATOR LOGIN \n");
+			System.out.print(" Username: ");
 			String username = sc.next();
 			
-			System.out.print("Password: ");
+			System.out.print(" Password: ");
 			String password = sc.next();
 			
 			System.out.println();

@@ -31,8 +31,9 @@ public class AccountService extends UserService {
 /*DELETE, INSERT, UPDATE															*/
 /*---------------------------------------------------------------------------------------------------------*/	
 		
-	public boolean withdraw() throws PSQLException {
+	public boolean withdraw() {
 		try(Connection conn = ConnectionDAO.connect()){
+			String sql = "";
 			return true;
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -46,6 +47,7 @@ public class AccountService extends UserService {
 		
 	public boolean deposit() {
 		try(Connection conn = ConnectionDAO.connect()){
+			String sql = "";
 			return true;
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
@@ -59,6 +61,7 @@ public class AccountService extends UserService {
 		
 	public boolean transfer() {
 		try(Connection conn = ConnectionDAO.connect()){
+			String sql = "";
 			return true;
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");

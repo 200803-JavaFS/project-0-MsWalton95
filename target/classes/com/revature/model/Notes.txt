@@ -23,10 +23,9 @@ Under Transaction -> Transaction History, Deposit, Withdraw, Transfer
 
 NEED FIX
 --------
-Register Login
-New Account
+ADD COMMIT/ROLLBACK - MAKE SURE customer info cannot be null
+ADD TIMESTAMP
 Deposit/Withdraw/Transfer
-Edit Customer
 
 --------------------------------------
 --------------Employee----------------
@@ -54,7 +53,6 @@ Customer Transactions -> All Transaction, Transaction History
 	
 NEED FIX
 -------
-Deny/Approve Account
 Transaction History
 
 ----------------------------------------
@@ -83,7 +81,8 @@ LAYOUT
 	Under Customer Account -> View All Accounts, View Account, Update Account
 		View All Accounts -> All Accounts, All Open, All Pending
 		View Account -> Accounts, Open, Pending
-		Update Account -> Approve, Deny, Update, Cancel
+		Update Account -> Approve, Deny, Edit, Cancel
+			Edit -> Account Name, Account Type, Approve
 	Under Customer Transaction ->All Transactions, Transaction History, Deposit, Withdraw, Transfer
 
 NEED FIX

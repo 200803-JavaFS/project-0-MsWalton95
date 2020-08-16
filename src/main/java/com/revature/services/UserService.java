@@ -13,7 +13,7 @@ public class UserService {
 	
 	public void signin() {
 		System.out.println("\n ----------------------------------- \n");
-		System.out.println(" 1. Log in \t" + "2. Exit");
+		System.out.println(" 1. Log in \t 2. Exit");
 		System.out.println("\n ----------------------------------- \n");
 		
 		int choice = sc.nextInt();
@@ -70,7 +70,7 @@ public class UserService {
 	
 	public void homePage() {
 		System.out.println("\n ----------------------------------- \n");
-		System.out.println(" 1. Customer Info \n 2. Customer Account \n 3. Customer Transactions \n" + "4. Log Out" );
+		System.out.println(" 1. Customer Info \n 2. Customer Account \n 3. Customer Transactions \n 4. Log Out" );
 		System.out.println("\n ----------------------------------- \n");
 	}
 	

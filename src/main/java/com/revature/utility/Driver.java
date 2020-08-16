@@ -16,6 +16,7 @@ public class Driver {
 		CustomerService cs = new CustomerService();
 		AccountService as = new AccountService();
 		EmployeeService es = new EmployeeService();
+		AdminService ads = new AdminService();
 		ConsoleDriver cd = new ConsoleDriver();
 		
 		//cd.begin();
@@ -46,9 +47,11 @@ public class Driver {
 //		System.out.println("-------------------------Delete Account By ID------------------------------");
 //		as.deleteAccountByID();
 		
-		cs.updateCustomer(5);
-
+		//cs.updateCustomer(4);
+		//ads.updateCustomer(5);
+		//es.denyAccountByID(4);
+//		ads.updateAccountByID(4);
 		
-		//cd.begin();
+		cd.begin();
 	}
 }

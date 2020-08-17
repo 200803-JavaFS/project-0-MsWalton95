@@ -38,7 +38,10 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	/*DELETE, INSERT, UPDATE	
 /*---------------------------------------------------------------------------------------------------------*/	
 		
-	public boolean denyAccountByID(int userID) {
+	public boolean denyAccountByID() {
+		System.out.println("\n" + "-----------------------------------" + "\n");
+		System.out.print("Please enter customer ID: ");
+		int userID = sc.nextInt();
 		try(Connection conn = ConnectionDAO.connect()){
 			String sql="DELETE FROM account WHERE account_id=? AND approved=false AND customer_fk=?";
 			psmt = conn.prepareStatement(sql);
@@ -57,7 +60,10 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	}
 /*---------------------------------------------------------------------------------------------------------*/	
 
-	public boolean approveAccountByID(int userID) {
+	public boolean approveAccountByID() {
+		System.out.println("\n" + "-----------------------------------" + "\n");
+		System.out.print("Please enter customer ID: ");
+		int userID = sc.nextInt();
 		try(Connection conn = ConnectionDAO.connect()){
 			String sql="UPDATE account SET approved=true WHERE account_id=? AND approved=false AND customer_fk=?;";
 			psmt = conn.prepareStatement(sql);
@@ -292,6 +298,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 		switch(choice) {
 			case 1: customerInfo(); break;
 			case 2: customerAccount();break;
+			//Optional - Transacation History
 			case 3: customerTrans();break;
 			case 4: logout(); break;
 			default: System.out.println("Invalid Input"); retry();
@@ -302,7 +309,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	
 	public void customerInfo() {
 		System.out.println("\n ----------------------------------- \n");
-		System.out.println("1. View All Customers \n 2. View Customer \n 3. Exit" );
+		System.out.println(" 1. View All Customers \n 2. View Customer \n 3. Exit" );
 		System.out.println("\n ----------------------------------- \n");
 		
 		try {
@@ -341,7 +348,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	
 	public void customerAccount() {
 		System.out.println("\n ----------------------------------- \n");
-		System.out.println("1. View All Accounts \n 2. View Account \n 3. Update Account \n 4. Exit" );
+		System.out.println(" 1. View All Accounts \n 2. View Account \n 3. Update Account \n 4. Exit" );
 		System.out.println("\n ----------------------------------- \n");
 		
 		try {
@@ -410,9 +417,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 /*---------------------------------------------------------------------------------------------------------*/	
 
 	public void getAccountOption() {
-		System.out.println("\n" + "-----------------------------------" + "\n");
-		System.out.print("Please enter customer ID: ");
-		int userID = sc.nextInt();
+
 		System.out.println("\n" + "-----------------------------------" + "\n");
 		System.out.println(" 1. View Account \n 2. View Pending Accounts \n 3. View Open Accounts \n 4. Exit" );
 		System.out.println("\n" + "-----------------------------------" + "\n");
@@ -420,17 +425,25 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 		int choice = sc.nextInt();
 		
 		switch(choice) {
-			case 1: 
-				
+			case 1: 		
+				System.out.println("\n" + "-----------------------------------" + "\n");
+				System.out.print("Please enter customer ID: ");
+				int userID = sc.nextInt();
 				as.getAccountByID(userID); 
 				homePage();
 				break;
 			case 2: 
-				as.getPendingAccountsByID(userID);
+				System.out.println("\n" + "-----------------------------------" + "\n");
+				System.out.print("Please enter customer ID: ");
+				int userID2 = sc.nextInt();
+				as.getPendingAccountsByID(userID2);
 				homePage();
 				break;
 			case 3:
-				as.getOpenAccountsByID(userID);
+				System.out.println("\n" + "-----------------------------------" + "\n");
+				System.out.print("Please enter customer ID: ");
+				int userID3 = sc.nextInt();
+				as.getOpenAccountsByID(userID3);
 				homePage();
 				break;
 			case 4: 
@@ -445,9 +458,6 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 /*---------------------------------------------------------------------------------------------------------*/	
 	public void updateAccountOption() {
 		System.out.println("\n" + "-----------------------------------" + "\n");
-		System.out.print("Please enter customer ID: ");
-		int userID = sc.nextInt();
-		System.out.println("\n" + "-----------------------------------" + "\n");
 		System.out.println(" 1. Approve Account \n 2. Deny Accounts \n 3. Exit" );
 		System.out.println("\n" + "-----------------------------------" + "\n");
 		
@@ -455,11 +465,11 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 		
 		switch(choice) {
 			case 1: 
-				approveAccountByID(userID);
+				approveAccountByID();
 				homePage();
 				break;
 			case 2: 
-				denyAccountByID(userID);
+				denyAccountByID();
 				homePage();
 				break;
 			case 3:
@@ -491,18 +501,13 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	/*---------------------------------------------------------------------------------------------------------*/	
 
 	public void editOption(int choice) {
-		
-		System.out.println("\n" + "-----------------------------------" + "\n");
-		System.out.print("Please enter customer ID: ");
-		int userID = sc.nextInt();
-				
 		switch(choice) {
 			case 1: 
-				approveAccountByID(userID);
+				approveAccountByID();
 				homePage();
 				break;
 			case 2: 
-				denyAccountByID(userID);
+				denyAccountByID();
 				homePage();
 				break;
 			case 3: 
@@ -515,7 +520,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	}
 	
 /*---------------------------------------------------------------------------------------------------------*/	
-	
+	//Optional - Transacation History
 	public void customerTrans() {
 		System.out.println("\n ----------------------------------- \n");
 		System.out.println("  1. View All Customer Transactions \n 2. View Customer Transaction \n 3. Exit" );

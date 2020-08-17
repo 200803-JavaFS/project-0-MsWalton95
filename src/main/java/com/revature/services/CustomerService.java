@@ -295,7 +295,7 @@ public class CustomerService extends UserService{
 		}
 		return null;		
 	}
-	
+
 /*---------------------------------------------------------------------------------------------------------*/	
 
 	public void homePage() {
@@ -321,7 +321,8 @@ public class CustomerService extends UserService{
 				infoOption();
 				break;
 			case 2: 
-				//getRecentTrans(); //TOP 5
+				//Optional - Transacation History
+				//getRecentTrans(); //LIMIT 5
 				transOption();
 				break;
 			case 3: 
@@ -355,10 +356,11 @@ public class CustomerService extends UserService{
 	}
 
 /*---------------------------------------------------------------------------------------------------------*/	
-
+	//Optional - Transacation History
 	public void transOption() {
 		System.out.println("\n ----------------------------------- \n");
-		System.out.print(" 1. Transaction History \n 2. Deposit \n 3. Withdraw \n 4. Transfer \n 5. Exit");
+		System.out.println(" 1. Transaction History \n 2. Deposit \n 3. Withdraw \n 4. Transfer \n 5. Exit");
+		System.out.println("\n ----------------------------------- \n");
 		int choice = sc.nextInt();
 		
 		switch(choice) {

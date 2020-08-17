@@ -91,3 +91,10 @@ Retrieve All Open Accounts
 2020-08-16 16:59:40 INFO  Admin:76 - Account Type Updated
 2020-08-16 17:04:01 INFO  Admin:101 - Account Status Updated
 2020-08-16 17:23:28 INFO  Driver:192 - New account created
+2020-08-16 17:31:39 INFO  Driver:199 - New account created
+2020-08-16 17:43:53 INFO  Driver:199 - New account created
+2020-08-16 18:22:37 INFO  Admin:222 - Account 22was cancelled
+2020-08-16 18:23:49 INFO  Driver:143 - 
+Retrieve All Account information
+2020-08-16 18:25:40 INFO  Driver:109 - Retrieve All Customer Information
+2020-08-16 18:27:24 INFO  Driver:109 - Retrieve All Customer Information

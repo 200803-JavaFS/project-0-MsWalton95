@@ -7,16 +7,12 @@ import com.revature.model.Customer;
 
 public interface AccountDAO {
 
-	public Customer getCustomerByID();
+	public Customer getCustomerByID(int userID);
 	
-	public List<Account> getAccountByID();
+	public List<Account> getAccountByID(int userID);
 	
-	public List<Account> getOpenAccountsByID();
+	public List<Account> getOpenAccountsByID(int userID);
 	
-	public List<Account> getPendingAccountsByID();
-	
-	public boolean createAccountByID();
-	
-	public boolean deleteAccountByID();
+	public List<Account> getPendingAccountsByID(int userID);
 	
 }

@@ -18,7 +18,10 @@ public class AdminService extends EmployeeService {
 	private static final Logger log = LogManager.getLogger(Admin.class);
 		
 /*---------------------------------------------------------------------------------------------------------*/	
-	public void updateAccountByID(int userID) {
+	public void updateAccountByID() {
+		System.out.println("\n" + "-----------------------------------" + "\n");
+		System.out.print("Please enter customer ID: ");
+		int userID = sc.nextInt();
 		try(Connection conn = ConnectionDAO.connect()){//Name/Balance/Type/Approved
 			System.out.println("\n ----------------------------------- \n");
 			System.out.println(" 1. Please enter Account Number");
@@ -69,7 +72,9 @@ public class AdminService extends EmployeeService {
 					case 2:
 						psmt.setString(2, "Savings");
 						break;
-					default: System.out.println("Invalid Input");
+					default: 
+						System.out.println("Invalid Input");
+						//retry();
 					}
 				psmt.setInt(2, userID);
 				psmt.setInt(3, accNumber);
@@ -107,6 +112,7 @@ public class AdminService extends EmployeeService {
 				break;
 			default: 
 				System.out.println("Invalid Input");
+				//retry();
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -115,8 +121,11 @@ public class AdminService extends EmployeeService {
 		}
 	}
 /*---------------------------------------------------------------------------------------------------------*/	
-	public void updateCustomer(int userID) {
+	public void updateCustomerByID() {
 		try(Connection conn = ConnectionDAO.connect()){
+			System.out.println("\n" + "-----------------------------------" + "\n");
+			System.out.print("Please enter customer ID: ");
+			int userID = sc.nextInt();
 			System.out.println("\n ----------------------------------- \n");
 			System.out.println(" 1. First Name \n 2. Last Name \n 3. Email \n 4. Phone Number \n 5. Password \n 6. Exit");
 			System.out.println("\n ----------------------------------- \n");
@@ -186,6 +195,7 @@ public class AdminService extends EmployeeService {
 				break;
 			default: 
 				System.out.println("Invalid Input");
+				//retry();
 			}
 			
 			psmt.setInt(2, userID);
@@ -199,8 +209,41 @@ public class AdminService extends EmployeeService {
 		}
 	}
 /*---------------------------------------------------------------------------------------------------------*/	
-	
-	public void cancelAccountByID() {}
+	//If customer changed banks or broke rules of using account then cancel account
+	// Any money in bank can either be transfer to new bank or a mailed check
+	public void cancelAccountByID() {
+		System.out.println("\n ----------------------------------- \n");
+		System.out.print("Please enter customer ID: ");
+		int userID = sc.nextInt();
+		System.out.println("\n ----------------------------------- \n");
+		System.out.println(" ARE YOU SURE YOU WANT TO CANCEL?");
+		System.out.println();
+		System.out.println(" 1. Yes \n 2. No" );
+		System.out.println("\n ----------------------------------- \n");
+		
+		int choice = sc.nextInt();
+		switch(choice) {
+			case 1:
+				try(Connection conn = ConnectionDAO.connect()){
+				String sql ="DELETE FROM account WHERE customer_fk=?; DELETE FROM customer WHERE customer_id=?;";
+				psmt = conn.prepareStatement(sql);
+				
+				psmt.setInt(1, userID);
+				psmt.setInt(2, userID);
+				
+				psmt.execute();
+				log.info("Account '" + userID + "' was cancelled");
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+				homePage();
+				break;
+			default:
+				homePage();
+				break;
+		}
+		
+	}
 	
 /*---------------------------------------------------------------------------------------------------------*/	
 	
@@ -217,7 +260,6 @@ public class AdminService extends EmployeeService {
 			System.out.println();
 			userLogin(username,password);
 			
-	
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
 		}catch(Exception e) {
@@ -244,6 +286,7 @@ public class AdminService extends EmployeeService {
 				homePage();
 				return e;
 			}else {
+				System.out.println("Username or password was incorrect");
 				return null;
 			}
 		}catch(SQLException e){
@@ -264,33 +307,35 @@ public class AdminService extends EmployeeService {
 			infoOption(choice);
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
-			retry();
+			//retry();
 		}
 	}
 	
 /*---------------------------------------------------------------------------------------------------------*/	
 	
 	public void infoOption(int choice) {
-		System.out.println("\n" + "-----------------------------------" + "\n");
-		System.out.print("Please enter customer ID: ");
-		int userID = sc.nextInt();
 		switch(choice) {
 			case 1: 
 				getAllCustomers(); 
 				homePage();
 				break;
 			case 2: 
+				System.out.println("\n" + "-----------------------------------" + "\n");
+				System.out.print("Please enter customer ID: ");
+				int userID = sc.nextInt();
 				as.getCustomerByID(userID); 
 				homePage();
 				break;
 			case 3:
-				//cs.updateCustomer();
+				updateCustomerByID();
 				homePage(); 
 				break;
 			case 4: 
 				homePage();
 				break;
-			default: System.out.println("Invalid input"); retry();
+			default: 
+				System.out.println("Invalid input"); 
+				//retry();
 		}
 	} 
 	
@@ -307,30 +352,24 @@ public class AdminService extends EmployeeService {
 			editOption(choice);
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
-			retry();
+			//retry();
 		}
 	}
 
 /*---------------------------------------------------------------------------------------------------------*/	
 
 	public void editOption(int choice) {
-		
-		System.out.println("\n" + "-----------------------------------" + "\n");
-		System.out.print("Please enter customer ID: ");
-		int userID = sc.nextInt();
-		
 		switch(choice) {
 			case 1:
-				updateAccountByID(userID);
+				updateAccountByID();
 				homePage();
 				break;
-			
 			case 2: 
-				approveAccountByID(userID);
+				approveAccountByID();
 				homePage();
 				break;
 			case 3: 
-				denyAccountByID(userID);
+				denyAccountByID();
 				homePage();
 				break;
 			case 4:
@@ -342,11 +381,11 @@ public class AdminService extends EmployeeService {
 				break;
 			default: 
 				System.out.println("Invalid input"); 
-				retry();
+				//retry();
 		}
 	}
 /*---------------------------------------------------------------------------------------------------------*/	
-	
+	//Optional - Transacation History
 	public void customerTrans() {
 		System.out.println("\n ----------------------------------- \n");
 		System.out.println("  1. View All Customer Transactions \n 2. View Customer Transaction \n "
@@ -363,6 +402,7 @@ public class AdminService extends EmployeeService {
 	}
 	
 /*---------------------------------------------------------------------------------------------------------*/	
+	//Optional - Transacation History
 	public void transOption(int choice) {
 		switch(choice) {
 			case 1: 
@@ -389,7 +429,7 @@ public class AdminService extends EmployeeService {
 				homePage(); 
 			default: 
 				System.out.println("Invalid input"); 
-				retry();
+				//retry();
 		}
 	} 
 	

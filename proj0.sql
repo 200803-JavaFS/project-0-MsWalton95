@@ -34,7 +34,12 @@ CREATE TABLE account(
 	customer_fk INTEGER REFERENCES customer(customer_id)
 )
 
-INSERT account(account_name, balance, account_type, approved, customer_fk) INTO VALUES(?,?,?,?,?)
+ALTER TABLE account ADD NOT NULL(account_name, account_type, approved)
+
+INSERT INTO account(account_name, balance, account_type, approved, customer_fk) VALUES
+('games', 75.00, 'Savings',FALSE,4),
+('new car', 70.00, 'Savings',FALSE,4),
+('dates', 175.00, 'Savings',FALSE,4);
 
 --SELECT customer_fk, SUM(balance) FROM account GROUP BY customer_fk ORDER BY customer_fk; --Show the amount for everything
 
@@ -45,6 +50,10 @@ SELECT * FROM customer ORDER BY customer_id DESC LIMIT 1;
 UPDATE account SET approved=true WHERE account_name='movie night' AND approved=false AND customer_fk=4;
 
 DELETE FROM account WHERE account_name='vacation' AND approved=false AND customer_fk=4;
+
+UPDATE account SET balance=balance-24 WHERE customer_fk=4 AND account_id=28;
+UPDATE account SET balance=balance+24 WHERE customer_fk=4 AND account_id=18;
+SELECT TIMESTAMP;
 
 --------------EMPLOYEE--------------
 CREATE TABLE employee(

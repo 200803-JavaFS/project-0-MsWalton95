@@ -6,6 +6,7 @@ import com.revature.model.Account;
 import com.revature.model.Customer;
 
 public interface EmployeeDAO {
+	
 	public List<Customer> getAllCustomers();
 	
 	public List<Account> getAllAccounts();
@@ -14,7 +15,7 @@ public interface EmployeeDAO {
 	
 	public List<Account> getAllOpenAccounts();
 	
-	public boolean denyAccountByID(int userID);
+	public boolean denyAccountByID();
 	
-	public boolean approveAccountByID(int userID);
+	public boolean approveAccountByID();
 }

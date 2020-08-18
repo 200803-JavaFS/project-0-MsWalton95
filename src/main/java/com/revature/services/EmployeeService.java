@@ -17,6 +17,7 @@ import com.revature.dao.EmployeeDAO;
 import com.revature.model.Account;
 import com.revature.model.Customer;
 import com.revature.model.Employee;
+import com.revature.model.Transaction;
 import com.revature.utility.ConnectionDAO;
 import com.revature.utility.Driver;
 
@@ -24,7 +25,9 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	Customer c = new Customer();
 	Account a = new Account();
 	Employee e = new Employee();
-	AccountService  as = new AccountService(); 
+	Transaction t = new Transaction();
+	
+	CustomerService cs = new CustomerService();
 	
 	Scanner sc = new Scanner(System.in);
 	
@@ -38,7 +41,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	/*DELETE, INSERT, UPDATE	
 /*---------------------------------------------------------------------------------------------------------*/	
 		
-	public boolean denyAccountByID() {
+	public boolean denyAccount() {
 		System.out.println("\n" + "-----------------------------------" + "\n");
 		System.out.print("Please enter customer ID: ");
 		int userID = sc.nextInt();
@@ -60,7 +63,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	}
 /*---------------------------------------------------------------------------------------------------------*/	
 
-	public boolean approveAccountByID() {
+	public boolean approveAccount() {
 		System.out.println("\n" + "-----------------------------------" + "\n");
 		System.out.print("Please enter customer ID: ");
 		int userID = sc.nextInt();
@@ -85,7 +88,35 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 /*SELECT
  /*---------------------------------------------------------------------------------------------------------*/	
 	
-	//public List<> getAllTransactions(){}	
+	public List<Transaction> getAllTransactions(){
+		try(Connection conn = ConnectionDAO.connect()){
+			String sql="SELECT * FROM transactions";
+			stmt = conn.createStatement();
+			
+			List<Transaction> transactions = new ArrayList<Transaction>();
+			
+			ResultSet rs = stmt.executeQuery(sql);
+			System.out.println("\n ----------------------------------- \n");
+			
+			while(rs.next()) {
+				t.setAccID(rs.getInt("account_fk"));
+				t.setAccType(rs.getString("transaction_type"));
+				t.setAmount(rs.getInt("transaction_amount"));
+				t.setTotalBalance(rs.getLong("total_balance"));
+				t.setTransID(rs.getInt("transaction_id"));
+				
+				transactions.add(t);
+				System.out.println(t);
+			}
+			System.out.println();
+			log.info("Retrieve All Transaction History");
+			return transactions;
+		
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
  
 /*---------------------------------------------------------------------------------------------------------*/	
 		
@@ -146,7 +177,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 				System.out.println(a);
 			}
 			
-			log.info("\n"+"Retrieve All Account information");
+			log.info("Retrieve All Account information");
 			return accounts;
 		
 		}catch(SQLException e){
@@ -178,7 +209,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 				System.out.println(a);
 			}
 
-			log.info("\n"+"Retrieve All Pending Accounts");
+			log.info("Retrieve All Pending Accounts");
 			return accounts;
 			
 		}catch(SQLException e) {
@@ -245,7 +276,6 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
-			super.retry();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -334,7 +364,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 				homePage();
 				break;
 			case 2: 
-				as.getCustomerByID(userID); 
+				cs.getCustomer(userID); 
 				homePage();
 				break;
 			case 3: 
@@ -429,21 +459,21 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 				System.out.println("\n" + "-----------------------------------" + "\n");
 				System.out.print("Please enter customer ID: ");
 				int userID = sc.nextInt();
-				as.getAccountByID(userID); 
+				cs.getAccounts(userID); 
 				homePage();
 				break;
 			case 2: 
 				System.out.println("\n" + "-----------------------------------" + "\n");
 				System.out.print("Please enter customer ID: ");
 				int userID2 = sc.nextInt();
-				as.getPendingAccountsByID(userID2);
+				cs.getPendingAccounts(userID2);
 				homePage();
 				break;
 			case 3:
 				System.out.println("\n" + "-----------------------------------" + "\n");
 				System.out.print("Please enter customer ID: ");
 				int userID3 = sc.nextInt();
-				as.getOpenAccountsByID(userID3);
+				cs.getOpenAccounts(userID3);
 				homePage();
 				break;
 			case 4: 
@@ -456,6 +486,7 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	}
 	
 /*---------------------------------------------------------------------------------------------------------*/	
+	
 	public void updateAccountOption() {
 		System.out.println("\n" + "-----------------------------------" + "\n");
 		System.out.println(" 1. Approve Account \n 2. Deny Accounts \n 3. Exit" );
@@ -465,11 +496,11 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 		
 		switch(choice) {
 			case 1: 
-				approveAccountByID();
+				approveAccount();
 				homePage();
 				break;
 			case 2: 
-				denyAccountByID();
+				denyAccount();
 				homePage();
 				break;
 			case 3:
@@ -503,11 +534,11 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	public void editOption(int choice) {
 		switch(choice) {
 			case 1: 
-				approveAccountByID();
+				approveAccount();
 				homePage();
 				break;
 			case 2: 
-				denyAccountByID();
+				denyAccount();
 				homePage();
 				break;
 			case 3: 
@@ -520,7 +551,6 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	}
 	
 /*---------------------------------------------------------------------------------------------------------*/	
-	//Optional - Transacation History
 	public void customerTrans() {
 		System.out.println("\n ----------------------------------- \n");
 		System.out.println("  1. View All Customer Transactions \n 2. View Customer Transaction \n 3. Exit" );
@@ -536,14 +566,13 @@ public class EmployeeService extends UserService implements EmployeeDAO {
 	}
 	
 /*---------------------------------------------------------------------------------------------------------*/	
-	///NEED TO WORK ON TRANSACTION HISTORY
 	public void transOption(int choice) {
 		switch(choice) {
 			case 1: 
-				//getAllTransaction();
+				getAllTransactions();
 				break;
 			case 2:
-				///getTransaction();
+				//getTransaction();
 				break;
 			case 3: 
 				homePage(); 

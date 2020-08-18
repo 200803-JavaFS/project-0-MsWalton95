@@ -14,46 +14,12 @@ public class Driver {
 
 	public static void main(String[] args) throws SQLException{
 		CustomerService cs = new CustomerService();
-		AccountService as = new AccountService();
 		EmployeeService es = new EmployeeService();
-		AdminService ads = new AdminService();
+		AdminService as = new AdminService();
 		ConsoleDriver cd = new ConsoleDriver();
 		
-		//cd.begin();
-		
-//		System.out.println("-------------------------All Customers------------------------------");
-//		es.getAllCustomers();
-//		System.out.println("-------------------------All Accounts------------------------------");
-		//es.getAllAccounts();
-//		System.out.println("-------------------------All Pending Accounts------------------------------");
-//		es.getAllPendingAccounts();
-//		System.out.println("-------------------------All Open Accounts------------------------------");
-//		es.getAllOpenAccounts();
-//		System.out.println("-------------------------Deny Accounts------------------------------");		
-//		es.denyAccountByID();
-//		System.out.println("-------------------------Approve Accounts------------------------------");
-//		es.approveAccountByID();
-		
-//		System.out.println("-------------------------Customer By ID------------------------------");
-//		as.getCustomerByID();
-//		System.out.println("-------------------------Account By ID------------------------------");
-//		as.getAccountByID();
-//		System.out.println("-------------------------Open Account By ID------------------------------");
-//		as.getOpenAccountsByID();
-//		System.out.println("-------------------------Pending Account By ID------------------------------");
-//		as.getPendingAccountsByID();		
-//		System.out.println("-------------------------Create Account By ID------------------------------");
-//		as.createAccountByID();
-//		System.out.println("-------------------------Delete Account By ID------------------------------");
-//		as.deleteAccountByID();
-		
-		//cs.updateCustomer(4);
-		//ads.updateCustomer(5);
-		//es.denyAccountByID(4);
-//		ads.updateAccountByID(4);
-//		as.deposit(4);
-		//as.withdraw(4);
-		as.transferFunds(4);
-		//ads.cancelAccountByID();
+		//Customer -> Personal Information -A
+		//Customer -> Transaction - fix the details to deposit/transfer/withdraw - Limit to 5 when seeing transaction
+		cd.begin();
 	}
 }

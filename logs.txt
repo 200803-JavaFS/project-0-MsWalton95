@@ -98,3 +98,32 @@ Retrieve All Open Accounts
 Retrieve All Account information
 2020-08-16 18:25:40 INFO  Driver:109 - Retrieve All Customer Information
 2020-08-16 18:27:24 INFO  Driver:109 - Retrieve All Customer Information
+2020-08-17 22:07:51 INFO  Driver:146 - Retrieve All Customer Information
+2020-08-17 22:08:35 INFO  Admin:140 - First Name Updated
+2020-08-17 22:08:54 INFO  Admin:152 -  Last Name Updated
+2020-08-17 22:10:02 INFO  Admin:164 - Email Updated
+2020-08-17 22:10:16 INFO  Admin:176 - Phone Number Updated
+2020-08-17 22:10:33 INFO  Admin:188 - Password Updated
+2020-08-17 22:13:40 INFO  Driver:180 - 
+Retrieve All Account information
+2020-08-17 22:14:37 INFO  Driver:212 - 
+Retrieve All Pending Accounts
+2020-08-17 22:14:54 INFO  Driver:244 - Retrieve All Open Accounts
+2020-08-17 22:18:43 INFO  Driver:112 - Retrieve All Transaction History
+2020-08-17 22:28:32 INFO  Admin:229 - Account '3' was cancelled
+2020-08-17 22:28:40 INFO  Driver:180 - Retrieve All Account information
+2020-08-17 22:54:23 INFO  Driver:112 - Retrieve All Transaction History
+2020-08-17 23:29:47 INFO  Admin:55 - Account Name Updated
+2020-08-17 23:30:22 INFO  Driver:180 - Retrieve All Account information
+2020-08-17 23:30:32 INFO  Driver:112 - Retrieve All Transaction History
+2020-08-17 23:30:42 INFO  Driver:112 - Retrieve All Transaction History
+2020-08-18 07:28:23 INFO  Driver:180 - Retrieve All Account information
+2020-08-18 09:46:48 INFO  Driver:76 - Withdrawn complete
+2020-08-18 09:48:04 INFO  Driver:138 - Deposit complete
+2020-08-18 09:48:59 INFO  CustomerService:138 - Deposit complete
+2020-08-18 10:02:10 INFO  CustomerService:428 - Email Updated
+2020-08-18 10:03:40 INFO  CustomerService:440 - Phone Number Updated
+2020-08-18 10:03:59 INFO  CustomerService:452 - Password Updated
+2020-08-18 10:06:47 INFO  CustomerService:138 - Deposit complete
+2020-08-18 10:07:58 INFO  CustomerService:76 - Withdrawn complete
+2020-08-18 10:10:12 INFO  CustomerService:195 - Transfer complete

@@ -40,21 +40,6 @@ public class UserService {
 		}
 	}
 	
-/*---------------------------------------------------------------------------------------------------------*/	
-	
-	public void retry() {
-		System.out.println("\n ----------------------------------- \n");
-		System.out.println(" 1. Continue \t" + "2. Exit");
-		System.out.println("\n ----------------------------------- \n");
-		
-		try {
-			int choice = sc.nextInt();
-			option(choice);
-		}catch(InputMismatchException e) {
-			System.out.println("Invalid Input. Restart");
-			System.exit(0);
-		}
-	}	
 	
 /*---------------------------------------------------------------------------------------------------------*/	
 	

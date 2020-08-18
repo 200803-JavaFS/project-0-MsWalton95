@@ -24,11 +24,10 @@ Under Transaction -> Transaction History, Deposit, Withdraw, Transfer
 NEED FIX
 --------
 RETRY OPTION
-ADD COMMIT/ROLLBACK - MAKE SURE customer info cannot be null
 ADD TIMESTAMP
 TRANSACTION HISTORY
-Deposit/Withdraw/Transfer - TECHNICAL - 0 OR NEGATIVE 
-POSSIBLE SQL FUNCTION - deposit/withdraw/transfer/cancel/create
+COMMIT/ROLLBACK - UPDATES/ DEPOSIT/WITHDRAW/TRANSFER
+TRIGGER- CREATE
 
 --------------------------------------
 --------------Employee----------------
@@ -91,3 +90,10 @@ LAYOUT
 NEED FIX
 --------
 
+ACCOUNT->
+EMPLOYEE -> ADMIN
+USER SERVICE
+EMPLOYEE
+ADMIN
+CUSTOMER
+ACCOUNT

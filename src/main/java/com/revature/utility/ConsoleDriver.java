@@ -52,10 +52,11 @@ public class ConsoleDriver {
 					a.signin(); break;
 				default: 
 					System.out.println("Wrong input. Try again");
+					System.exit(0);
 			}
 		}catch(InputMismatchException e) {
-			System.out.println("Invalid Input");
-			u.retry();
+			System.out.println("Invalid Input. Try Again");
+			System.exit(0);
 		}
 	}
 }

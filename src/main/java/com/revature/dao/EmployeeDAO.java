@@ -15,7 +15,7 @@ public interface EmployeeDAO {
 	
 	public List<Account> getAllOpenAccounts();
 	
-	public boolean denyAccountByID();
+	public boolean denyAccount();
 	
-	public boolean approveAccountByID();
+	public boolean approveAccount();
 }

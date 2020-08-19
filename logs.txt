@@ -185,3 +185,9 @@ Retrieve All Pending Accounts
 2020-08-18 20:53:29 INFO  Admin:181 - Account Status Updated
 2020-08-18 20:54:40 INFO  Driver:210 - Retrieve All Account information
 2020-08-18 20:56:29 INFO  Driver:210 - Retrieve All Account information
+2020-08-18 21:12:16 INFO  CustomerService:57 - Withdrawn complete
+2020-08-18 21:19:43 INFO  CustomerService:69 - Withdrawn complete
+2020-08-18 21:20:15 INFO  CustomerService:69 - Withdrawn complete
+2020-08-18 21:46:51 INFO  CustomerService:180 - Transfer complete
+2020-08-18 21:52:56 INFO  CustomerService:176 - Transfer complete
+2020-08-18 21:56:11 INFO  CustomerService:117 - Deposit complete

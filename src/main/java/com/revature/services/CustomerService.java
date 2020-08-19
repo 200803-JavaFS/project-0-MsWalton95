@@ -33,53 +33,44 @@ public class CustomerService extends Thread{
 /*---------------------------------------------------------------------------------------------------------*/	
 	
 	public boolean withdraw(int userID) {
-		getOpenAccounts(userID);
-		System.out.println("\n ----------------------------------- \n");
-		System.out.print(" Which Account Number to withdraw from? ");
-		int accID = sc.nextInt();
-
-		getAccount(userID, accID); //double balance = a.getBalance();
-		System.out.println("\n ----------------------------------- \n");
-		System.out.print(" Enter the amount to withdraw: ");
-		int money = sc.nextInt();
-		
 		try(Connection conn = ConnectionDAO.connect()){
+			getOpenAccounts(userID);
+			
+			System.out.println("\n ----------------------------------- \n");
+			System.out.print(" Which Account ID to withdraw from? ");
+			int accID = sc.nextInt();
+	
+			getAccount(userID, accID); 
+			double balance = a.getBalance();
+			System.out.println("\n ----------------------------------- \n");
+			System.out.print(" Enter the amount to withdraw: ");
+			int money = sc.nextInt();
+		
 			String sql = "UPDATE account SET balance=balance-? WHERE customer_fk=? AND account_id=?;";
 			psmt = conn.prepareStatement(sql);
 			
-			psmt.setInt(1, money);
-			psmt.setInt(2, userID);
-			psmt.setInt(3, accID);
-			
-			psmt.execute();
-			getTotal(userID ,"Withdraw", money);
-			System.out.println();
-			log.info("Withdrawn complete");
-			
-			getAccounts(userID);
-			//homePage();
-//			if(money > balance) {
-//				psmt.setInt(1, money);
-//				psmt.setInt(2, userID);
-//				psmt.setInt(3, accID);
-//				System.out.println("Cannot withdraw more than within the balance");
-//			}else if(money <=0) {
-//				psmt.setInt(1, money);
-//				psmt.setInt(2, userID);
-//				psmt.setInt(3, accID);
-//				System.out.println("Cannot withdraw 0 or negative value");
-//			}else {
-//				psmt.setInt(1, money);
-//				psmt.setInt(2, userID);
-//				psmt.setInt(3, accID);
-//				
-//				getTotal(userID,"Withdraw", money);
-//				getAccount(userID, accID);
-//			}
-//			psmt.execute();
-//			System.out.println("Amount Withdrawn: "+ money + "Current Balance: " + balance);
-//			homePage();
-			return true;
+			if(money > balance) {
+				System.out.println("\n Withdrawn cannot be more than balance");
+				t1.run();
+			}else if(money > 1000) {
+				System.out.println("\n Withdrawn cannot be more than 1000 per day");
+				t1.run();
+			}else if(money <= 0) {
+				System.out.println("\n Withdrawn cannot be a negative value");
+				t1.run();
+			}else {
+				psmt.setInt(1, money);
+				psmt.setInt(2, userID);
+				psmt.setInt(3, accID);
+				
+				psmt.execute();
+				getTotal(userID ,"Withdraw", money);
+				System.out.println();
+				log.info("Withdrawn complete");
+				
+				getAccounts(userID);
+				return true;
+				}
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
 			sc.next();
@@ -97,53 +88,41 @@ public class CustomerService extends Thread{
 /*---------------------------------------------------------------------------------------------------------*/
 
 	public boolean deposit(int userID) {
-		getOpenAccounts(userID);
-				
-		System.out.println("\n ----------------------------------- \n");
-		System.out.print(" Which Account Number to deposit to? ");
-		int accID = sc.nextInt();
-		
-		getAccount(userID, accID);
-		System.out.println("\n ----------------------------------- \n");
-		System.out.print(" Enter the amount to deposit: ");
-		int money = sc.nextInt();
-		
 		try(Connection conn = ConnectionDAO.connect()){
+			getOpenAccounts(userID);
+					
+			System.out.println("\n ----------------------------------- \n");
+			System.out.print(" Which Account ID to deposit to? ");
+			int accID = sc.nextInt();
+			
+			getAccount(userID, accID);
+			System.out.println("\n ----------------------------------- \n");
+			System.out.print(" Enter the amount to deposit: ");
+			int money = sc.nextInt();
+		
 			String sql = "UPDATE account SET balance=balance+? WHERE customer_fk=? AND account_id=?;";
 			psmt = conn.prepareStatement(sql);
 			
-			psmt.setInt(1, money);
-			psmt.setInt(2, userID);
-			psmt.setInt(3, accID);
-			
-			psmt.execute();
-			getTotal(userID ,"Deposit", money);
-			System.out.println();
-			log.info("Deposit complete");
-			getAccounts(userID);
-			//homePage();
-
-//			if(money <= 0) {
-//			System.out.println("Cannot withdraw 0 or negative value");
-//			homePage();
-//			
-//			}else {
-//			psmt.setInt(1, money);
-//			psmt.setInt(2, userID);
-//			psmt.setInt(3, accID);	
-//			
-//			getTotal(userID ,"Deposit", money);
-//			getAccount(userID,accID);
-//			}
-			
-//			psmt.execute();
-//			System.out.println("Amount Deposit: "+ money + "Current Balance: " + balance);
-//			homePage();
-			return true;
+			if(money <= 0) {
+				System.out.println("\n Deposit cannot be a negative value");
+				t1.run();
+			}else {
+				psmt.setDouble(1, money);
+				psmt.setInt(2, userID);
+				psmt.setInt(3, accID);
+				
+				psmt.execute();
+				getTotal(userID ,"Deposit", money);
+				System.out.println();
+				log.info("Deposit complete");
+				
+				getAccounts(userID);
+				return true;
+			}
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
 			sc.next();
-			homePage();
+			t1.run();
 		}catch(SQLException e) {
 			System.out.println("Issue with SQL Connection: " + e);
 			t1.run();
@@ -157,20 +136,34 @@ public class CustomerService extends Thread{
 /*---------------------------------------------------------------------------------------------------------*/
 
 	public boolean transfer(int userID) {
-		getOpenAccounts(userID);
-		System.out.println("\n ----------------------------------- \n");
-		System.out.print(" Which Account Number to transfer from? ");
-		int accNum = sc.nextInt();
-		System.out.print(" Which Account Number to transfer to? ");
-		int accNum2 = sc.nextInt();
-		System.out.print(" What is the amount to transfer? ");
-		int money = sc.nextInt();
-		
 		try(Connection conn = ConnectionDAO.connect()){
+			getOpenAccounts(userID);
+			
+			System.out.println("\n ----------------------------------- \n");
+			System.out.print(" Which Account ID to transfer from? ");
+			int accNum = sc.nextInt();
+			getAccount(userID, accNum); 
+			double balance = a.getBalance();
+			
+			System.out.println("\n ----------------------------------- \n");
+			System.out.print(" Which Account ID to transfer to? ");
+			int accNum2 = sc.nextInt();
+
+			System.out.print(" What is the amount to transfer? ");
+			int money = sc.nextInt();
+		
+		
 			String sql = "UPDATE account SET balance=balance-? WHERE customer_fk=? AND account_id=?;" + 
 					"UPDATE account SET balance=balance+? WHERE customer_fk=? AND account_id=?;";
 			psmt = conn.prepareStatement(sql);
 			
+			if(money > balance) {
+				System.out.println("\n Transfer cannot be more than balance");
+				t1.run();
+			}else if(money <= 0) {
+				System.out.println("\n Transfer cannot be a negative value");
+				t1.run();
+			}else {
 			psmt.setInt(1, money);
 			psmt.setInt(2, userID);
 			psmt.setInt(3, accNum);
@@ -185,6 +178,7 @@ public class CustomerService extends Thread{
 			getAccounts(userID);
 			t1.start();
 			return true;
+			}
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
 			sc.next();
@@ -282,6 +276,7 @@ public class CustomerService extends Thread{
 				System.out.println(a);
 			}else {
 				System.out.println("That is the incorrect account number");
+				t1.run();
 				}
 		return a;
 		}catch(SQLException e) {

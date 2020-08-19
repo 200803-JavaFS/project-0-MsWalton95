@@ -9,16 +9,14 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-import java.math.BigInteger;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.revature.model.*;
 import com.revature.utility.ConnectionDAO;
-import com.revature.utility.Driver;
 
-public class CustomerService extends UserService{
+public class CustomerService extends Thread{
 	Account a = new Account();
 	Customer c = new Customer();
 	Transaction t = new Transaction();
@@ -29,26 +27,9 @@ public class CustomerService extends UserService{
 	Statement stmt;
 	PreparedStatement psmt;
 	
-/*---------------------------------------------------------------------------------------------------------*/	
-	
-	public boolean getTotal(int userID,String accType, int money) {
-		try(Connection conn = ConnectionDAO.connect()){
-			String sql="CREATE OR REPLACE FUNCTION get_total() RETURNS NUMERIC\r\n" + 
-					"AS $$ \r\n" + 
-					"SELECT SUM(balance) FROM account WHERE customer_fk=" + userID + ";\r\n" + 
-					"$$ LANGUAGE SQL; "+
-					"INSERT INTO transactions(transaction_type, transaction_amount,total_balance,customer_fk)VALUES" + 
-					"( '" + accType + "'," + money + ", get_total(), " + userID + ");";
-			stmt = conn.createStatement();
-			stmt.execute(sql);
-			return true;
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
 
+/*---------------------------------------------------------------------------------------------------------*/	
+//	Transactions
 /*---------------------------------------------------------------------------------------------------------*/	
 	
 	public boolean withdraw(int userID) {
@@ -57,7 +38,7 @@ public class CustomerService extends UserService{
 		System.out.print(" Which Account Number to withdraw from? ");
 		int accID = sc.nextInt();
 
-		getAccount(userID, accID); double balance = a.getBalance();
+		getAccount(userID, accID); //double balance = a.getBalance();
 		System.out.println("\n ----------------------------------- \n");
 		System.out.print(" Enter the amount to withdraw: ");
 		int money = sc.nextInt();
@@ -76,7 +57,7 @@ public class CustomerService extends UserService{
 			log.info("Withdrawn complete");
 			
 			getAccounts(userID);
-			homePage();
+			//homePage();
 //			if(money > balance) {
 //				psmt.setInt(1, money);
 //				psmt.setInt(2, userID);
@@ -101,17 +82,20 @@ public class CustomerService extends UserService{
 			return true;
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
+			sc.next();
+			t1.run();
+		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			homePage();
 		}catch(Exception e) {
 			e.printStackTrace();
+			homePage();
 		}
 		return false;
 	}
 
 /*---------------------------------------------------------------------------------------------------------*/
-//	public boolean depositMoney(int userID, int accID, int money) {
-//		
-//	}
-	
+
 	public boolean deposit(int userID) {
 		getOpenAccounts(userID);
 				
@@ -119,7 +103,7 @@ public class CustomerService extends UserService{
 		System.out.print(" Which Account Number to deposit to? ");
 		int accID = sc.nextInt();
 		
-		getAccount(userID, accID); double balance = a.getBalance();
+		getAccount(userID, accID);
 		System.out.println("\n ----------------------------------- \n");
 		System.out.print(" Enter the amount to deposit: ");
 		int money = sc.nextInt();
@@ -137,7 +121,7 @@ public class CustomerService extends UserService{
 			System.out.println();
 			log.info("Deposit complete");
 			getAccounts(userID);
-			homePage();
+			//homePage();
 
 //			if(money <= 0) {
 //			System.out.println("Cannot withdraw 0 or negative value");
@@ -158,14 +142,19 @@ public class CustomerService extends UserService{
 			return true;
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
+			sc.next();
+			homePage();
+		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			t1.run();
 		}catch(Exception e) {
 			e.printStackTrace();
+			homePage();
 		}
 		return false;
 	}
 		
 /*---------------------------------------------------------------------------------------------------------*/
-		
 
 	public boolean transfer(int userID) {
 		getOpenAccounts(userID);
@@ -194,49 +183,44 @@ public class CustomerService extends UserService{
 			System.out.println();
 			log.info("Transfer complete");
 			getAccounts(userID);
-			homePage();
+			t1.start();
 			return true;
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
+			sc.next();
+			t1.run();
+		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			homePage();
 		}catch(Exception e) {
 			e.printStackTrace();
+			homePage();
 		}
 		return false;
 	}
 		
 /*---------------------------------------------------------------------------------------------------------*/	
-/*SELECT															*/
-/*---------------------------------------------------------------------------------------------------------*/			
-
-	public List <Transaction> getTransaction(int userID) {
-		try(Connection conn = ConnectionDAO.connect()){
-			String sql="SELECT * FROM transactions WHERE customer_fk=?";
-			psmt = conn.prepareStatement(sql);
-			
-			System.out.println("\n ----------------------------------- \n");
-			psmt.setInt(1, userID);
-			List<Transaction> transactions = new ArrayList<Transaction>();
-			
-			ResultSet rs = psmt.executeQuery();
-			while(rs.next()) {
-				t.setAccID(userID);
-				t.setAccType(rs.getString("transaction_type"));
-				t.setAmount(rs.getInt("transaction_amount"));
-				t.setTotalBalance(rs.getLong("total_balance"));
-				t.setTransID(rs.getInt("transaction_id"));
-				
-				transactions.add(t);
-				System.out.println(t);
-			}
-			return transactions;
-		
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 	
-/*---------------------------------------------------------------------------------------------------------*/
+	public boolean getTotal(int userID,String accType, int money) {
+		try(Connection conn = ConnectionDAO.connect()){
+			String sql="CREATE OR REPLACE FUNCTION get_total() RETURNS NUMERIC\r\n" + 
+					"AS $$ \r\n" + 
+					"SELECT SUM(balance) FROM account WHERE customer_fk=" + userID + ";\r\n" + 
+					"$$ LANGUAGE SQL; "+
+					"INSERT INTO transactions(transaction_type, transaction_amount,total_balance,customer_fk)VALUES" + 
+					"( '" + accType + "'," + money + ", get_total(), " + userID + ");";
+			stmt = conn.createStatement();
+			stmt.execute(sql);
+			return true;
+		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+		}
+		return false;
+	}
+
+/*---------------------------------------------------------------------------------------------------------*/	
+//	Retrieve Information
+/*---------------------------------------------------------------------------------------------------------*/	
 	
 	public Customer getCustomer(int userID) {	
 		try (Connection conn = ConnectionDAO.connect()){
@@ -260,15 +244,22 @@ public class CustomerService extends UserService{
 				System.out.println(c);
 				return c;
 			}else {
+				System.out.println("There is no customer under that ID");
+				t1.run();
 				return null;
 			}
-		}catch(SQLException e){
+		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			homePage();
+		}catch(Exception e) {
 			e.printStackTrace();
+			homePage();
 		}
 		return null;		
 	}
 	
 /*---------------------------------------------------------------------------------------------------------*/	
+	
 	public Account getAccount(int userID, int accID) {	
 		try(Connection conn = ConnectionDAO.connect()){
 			String sql = "SELECT * FROM account WHERE customer_fk=? AND account_id=?";
@@ -280,30 +271,67 @@ public class CustomerService extends UserService{
 			
 			ResultSet rs = psmt.executeQuery();
 	
-			while(rs.next()) {
-				a.setAccNumber(rs.getInt("account_id"));
+			if(rs.next()) {
+				a.setAccID(rs.getInt("account_id"));
 				a.setAccName(rs.getString("account_name"));
 				a.setBalance(rs.getDouble("balance"));
 				a.setAccType(rs.getString("account_type"));
 				a.setApproved(rs.getBoolean("approved"));
-				a.setAccID(rs.getInt("customer_fk"));
+				a.setUserID(rs.getInt("customer_fk"));
 
 				System.out.println(a);
-			}
+			}else {
+				System.out.println("That is the incorrect account number");
+				}
 		return a;
-		
-		}catch(SQLException e){
+		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			homePage();
+		}catch(Exception e) {
 			e.printStackTrace();
-		}catch(InputMismatchException ex) {
-			ex.printStackTrace();
+			homePage();
 		}
 		return null;
 	}
 	
+/*---------------------------------------------------------------------------------------------------------*/	
+	
+	public List <Transaction> getTransaction(int userID) {
+		try(Connection conn = ConnectionDAO.connect()){
+			String sql="SELECT * FROM transactions WHERE customer_fk=? ORDER BY transaction_id DESC";
+			psmt = conn.prepareStatement(sql);
+			
+			System.out.println("\n ----------------------------------- \n");
+			psmt.setInt(1, userID);
+			List<Transaction> transactions = new ArrayList<Transaction>();
+			
+			ResultSet rs = psmt.executeQuery();
+			while(rs.next()) {
+				t.setAccID(userID);
+				t.setAccType(rs.getString("transaction_type"));
+				t.setAmount(rs.getInt("transaction_amount"));
+				t.setTotalBalance(rs.getLong("total_balance"));
+				t.setTransID(rs.getInt("transaction_id"));
+				
+				transactions.add(t);
+				System.out.println(t);
+			}
+			return transactions;
+		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			homePage();
+		}catch(Exception e) {
+			e.printStackTrace();
+			homePage();
+		}
+		return null;
+	}
+	
+/*---------------------------------------------------------------------------------------------------------*/	
 	
 	public List<Account> getAccounts(int userID) {	
 		try(Connection conn = ConnectionDAO.connect()){
-			String sql = "SELECT * FROM account WHERE customer_fk=?";
+			String sql = "SELECT * FROM account WHERE customer_fk=? ORDER BY customer_fk, account_id";
 			psmt = conn.prepareStatement(sql);
 			
 			System.out.println("\n ----------------------------------- \n");
@@ -314,22 +342,23 @@ public class CustomerService extends UserService{
 			ResultSet rs = psmt.executeQuery();
 	
 			while(rs.next()) {
-				a.setAccNumber(rs.getInt("account_id"));
+				a.setAccID(rs.getInt("account_id"));
 				a.setAccName(rs.getString("account_name"));
 				a.setBalance(rs.getDouble("balance"));
 				a.setAccType(rs.getString("account_type"));
 				a.setApproved(rs.getBoolean("approved"));
-				a.setAccID(rs.getInt("customer_fk"));
+				a.setUserID(rs.getInt("customer_fk"));
 				
 				accounts.add(a);
 				System.out.println(a);
 			}
 		return accounts;
-		
-		}catch(SQLException e){
+		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			homePage();
+		}catch(Exception e) {
 			e.printStackTrace();
-		}catch(InputMismatchException ex) {
-			ex.printStackTrace();
+			homePage();
 		}
 		return null;
 	}
@@ -338,7 +367,7 @@ public class CustomerService extends UserService{
 
 	public List<Account> getPendingAccounts(int userID) {
 		try(Connection conn = ConnectionDAO.connect()){
-			String sql = "SELECT * FROM account WHERE approved=false AND customer_fk=?";
+			String sql = "SELECT * FROM account WHERE approved=false AND customer_fk=? ORDER BY customer_fk, account_id";
 			psmt = conn.prepareStatement(sql);
 			
 			System.out.println("\n ----------------------------------- \n");
@@ -348,24 +377,25 @@ public class CustomerService extends UserService{
 			
 			ResultSet rs = psmt.executeQuery();
 			
-			if(rs.next()) {
-				a.setAccNumber(rs.getInt("account_id"));
+			while(rs.next()) {
+				a.setAccID(rs.getInt("account_id"));
 				a.setAccName(rs.getString("account_name"));
 				a.setBalance(rs.getDouble("balance"));
 				a.setAccType(rs.getString("account_type"));
 				a.setApproved(rs.getBoolean("approved"));
-				a.setAccID(rs.getInt("customer_fk"));
+				a.setUserID(rs.getInt("customer_fk"));
 				
 				accounts.add(a);
 				System.out.println(a);
-			}else {
-			System.out.println("No pending account...");
 			}
 			
 			return accounts;
-			
 		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			homePage();
+		}catch(Exception e) {
 			e.printStackTrace();
+			homePage();
 		}
 		return null;
 	}	
@@ -374,7 +404,7 @@ public class CustomerService extends UserService{
 	
 	public List<Account> getOpenAccounts(int userID) {
 		try(Connection conn = ConnectionDAO.connect()){
-			String sql = "SELECT * FROM account WHERE approved=true AND customer_fk=?";
+			String sql = "SELECT * FROM account WHERE approved=true AND customer_fk=? ORDER BY customer_fk, account_id";
 			psmt = conn.prepareStatement(sql);
 			
 			System.out.println("\n ----------------------------------- \n");
@@ -385,29 +415,32 @@ public class CustomerService extends UserService{
 			ResultSet rs = psmt.executeQuery();
 			
 			while(rs.next()) {
-				a.setAccNumber(rs.getInt("account_id"));
+				a.setAccID(rs.getInt("account_id"));
 				a.setAccName(rs.getString("account_name"));
 				a.setBalance(rs.getDouble("balance"));
 				a.setAccType(rs.getString("account_type"));
 				a.setApproved(rs.getBoolean("approved"));
-				a.setAccID(rs.getInt("customer_fk"));
+				a.setUserID(rs.getInt("customer_fk"));
 				
 				accounts.add(a);
 				System.out.println(a);
 			}
 			
 			return accounts;
-			
 		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			homePage();
+		}catch(Exception e) {
 			e.printStackTrace();
+			homePage();
 		}
 		return null;
 	}
 
 /*---------------------------------------------------------------------------------------------------------*/	
-/*UPDATE, INSERT															*/
+//	Main Customer Services
 /*---------------------------------------------------------------------------------------------------------*/	
-	
+
 	public void updateCustomer(int userID) {
 		try(Connection conn = ConnectionDAO.connect()){
 			System.out.println("\n ----------------------------------- \n");
@@ -453,7 +486,7 @@ public class CustomerService extends UserService{
 				log.info("Password Updated");
 				break;
 			case 4: 
-				homePage();
+				t1.run();
 				break;
 			default: 
 				System.out.println("Invalid Input");
@@ -462,11 +495,17 @@ public class CustomerService extends UserService{
 			psmt.setInt(2, userID);
 
 			psmt.execute();
-			homePage();
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}catch(InputMismatchException ex) {
+			t1.run();
+		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
+			sc.next();
+			t1.run();
+		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			homePage();
+		}catch(Exception e) {
+			e.printStackTrace();
+			homePage();
 		}
 	}
 	
@@ -478,24 +517,35 @@ public class CustomerService extends UserService{
 			psmt = conn.prepareStatement(sql);
 			
 			System.out.println("\n ----------------------------------- \n");
-			System.out.print("Create your new username: ");
+			System.out.print(" Create your new username: ");
 			String username = sc.next();
 			psmt.setString(1, username);
 			
-			System.out.print("Create your new password: ");
+			System.out.print(" Create your new password: ");
 			String password = sc.next();
 			psmt.setString(2, password);
 			
-			System.out.print("Enter your existing account: ");
+			System.out.print(" Enter your existing account: ");
 			int userID = sc.nextInt();
 			psmt.setInt(3, userID);
 			
 			psmt.execute();
 			System.out.println();
 			log.info("New login account created");
-			return true;
+			
+			System.out.println("\n ----------------------------------- \n");
+			userLogin(username, password);
+		
+		}catch(InputMismatchException e) {
+			System.out.println("Invalid Input");
+			sc.next();
+			t2.run();
 		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			signin();
+		}catch(Exception e) {
 			e.printStackTrace();
+			signin();
 		}
 		return false;
 	}
@@ -504,31 +554,33 @@ public class CustomerService extends UserService{
 	
 	public boolean createAccount() {
 		try(Connection conn = ConnectionDAO.connect()) {
-			String sql ="INSERT INTO customer (first_name, last_name, email, phone_number) VALUES (?, ?, ?, ?);";
+			String sql ="INSERT INTO customer (user_name, pass_word, first_name, last_name, email, phone_number) VALUES (?, ?, ?, ?, ?, ?);";
 			psmt = conn.prepareStatement(sql);
 			
 			System.out.println("\n ----------------------------------- \n");
 			System.out.print("Create your new username: ");
 			String username = sc.next();
+			psmt.setString(1, username);
 			
 			System.out.print("Create your new password: ");
 			String password = sc.next();
+			psmt.setString(2, password);
 			
 			System.out.print("Enter your first name: ");
 			String firstName = sc.next();
-			psmt.setString(1, firstName);
+			psmt.setString(3, firstName);
 			
 			System.out.print("Enter your last name: ");
 			String lastName = sc.next();
-			psmt.setString(2, lastName);
+			psmt.setString(4, lastName);
 			
 			System.out.print("Enter your email address: ");
 			String email = sc.next();
-			psmt.setString(3, email);
+			psmt.setString(5, email);
 			
 			System.out.print("Enter your phone number: ");
 			long phone = sc.nextLong();
-			psmt.setLong(4, phone);
+			psmt.setLong(6, phone);
 			
 			psmt.execute();
 			
@@ -546,12 +598,22 @@ public class CustomerService extends UserService{
 				String fullName = c.getFirstName() + " " + c.getLastName();
 				
 				createAccountInfo(userID, fullName, username, password);
+			}else {
+				System.out.println("Invalid Input. Try Again");
+				signin();
 			}
 			return true;
+		
 		}catch(InputMismatchException e) {
-			e.printStackTrace();
+			System.out.println("Invalid Input");
+			sc.next();
+			t2.run();
+		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			signin();
 		}catch(Exception e) {
 			e.printStackTrace();
+			signin();
 		}
 		return false;
 	}
@@ -560,8 +622,7 @@ public class CustomerService extends UserService{
 	
 	public boolean createAccountInfo(int userID, String fullName, String username, String password) {
 		try(Connection conn = ConnectionDAO.connect()){
-			String sql = "INSERT INTO account(account_name, balance, account_type, approved, customer_fk) VALUES(?,?,?,?,?);"+
-					"INSERT INTO users(user_name, pass_word, customer_fk) VALUES (?,?,?);";
+			String sql = "INSERT INTO account(account_name, balance, account_type, approved, customer_fk) VALUES(?,?,?,?,?);";
 			psmt = conn.prepareStatement(sql);
 			
 			psmt.setString(1, "default");
@@ -569,10 +630,6 @@ public class CustomerService extends UserService{
 			psmt.setString(3, "Checkings");
 			psmt.setBoolean(4, false);
 			psmt.setInt(5, userID);
-			
-			psmt.setString(6, username);
-			psmt.setString(7, password);
-			psmt.setInt(8, userID);
 			
 			psmt.execute();
 			
@@ -584,15 +641,51 @@ public class CustomerService extends UserService{
 			homePage();
 			return true;
 		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			signin();
+		}catch(Exception e) {
 			e.printStackTrace();
+			signin();
 		}
 		return false;
 	}
-	 
+
 /*---------------------------------------------------------------------------------------------------------*/	
-/*BASICS															*/
+//	Login and Options
 /*---------------------------------------------------------------------------------------------------------*/	
 	
+	Thread t1=new Thread(){
+		
+	    public void run(){  
+	    	try{  
+				 System.out.println("\n ----------------------------------- \n");
+				 System.out.println(" Loading Home Page...");
+				 Thread.sleep(1000); 
+				 homePage();
+	        }catch(InterruptedException e){
+	       	 System.out.println(e); 
+	       	 }
+	    }  
+	 };  
+
+/*---------------------------------------------------------------------------------------------------------*/	
+	 
+	 Thread t2=new Thread(){
+			
+		    public void run(){  
+		    	try{  
+					 System.out.println("\n ----------------------------------- \n");
+					 System.out.println(" Loading Main Page...");
+					 Thread.sleep(1000); 
+					 signin();
+		        }catch(InterruptedException e){
+		       	 System.out.println(e); 
+		       	 }
+		    }  
+		 };  
+	 
+/*---------------------------------------------------------------------------------------------------------*/	
+			
 	public void signin() {
 		System.out.println("\n ----------------------------------- \n");
 		System.out.println(" 1. Log in \n 2. Create Account \n 3. Register Login \n 4. Exit");
@@ -610,12 +703,16 @@ public class CustomerService extends UserService{
 				case 4:
 					logout(); break;
 				default: 
-					System.out.println("Wrong input. Try again"); 
+					System.out.println(" Wrong input. Try again");
+					t2.run();
 			}
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
+			sc.next();
+			t2.run();
 		}catch(Exception e) {
 			e.printStackTrace();
+			signin();
 		}
 	}
 	
@@ -636,8 +733,14 @@ public class CustomerService extends UserService{
 	
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
+			sc.next();
+			t2.run();
+		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			signin();
 		}catch(Exception e) {
 			e.printStackTrace();
+			signin();
 		}
 	}
 	
@@ -664,10 +767,16 @@ public class CustomerService extends UserService{
 				homePage();
 				return c;
 			}else {
+				System.out.println(" Username or password incorrect");
+				t2.run();
 				return null;
 			}
-		}catch(SQLException e){
+		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			signin();
+		}catch(Exception e) {
 			e.printStackTrace();
+			signin();
 		}
 		return null;		
 	}
@@ -684,7 +793,11 @@ public class CustomerService extends UserService{
 			homeOption(choice);
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
-			logout();
+			sc.next();
+			t1.run();
+		}catch(Exception e) {
+			e.printStackTrace();
+			homePage();
 		}
 	}
 	
@@ -704,7 +817,7 @@ public class CustomerService extends UserService{
 				logout(); 
 				break;
 			default: 
-				System.out.println("Invalid Input"); homePage();
+				System.out.println(" Invalid Input"); 
 		}
 	}
 	
@@ -714,20 +827,27 @@ public class CustomerService extends UserService{
 		System.out.println("\n ----------------------------------- \n");
 		System.out.println(" 1. Update Information \t 2.Exit ");
 		System.out.println("\n ----------------------------------- \n");
-		int choice = sc.nextInt();
-		switch(choice) {
-			case 1: 
-				updateCustomer(c.getUserID()); 
-				homePage();
-				break;
-			case 2:  
-				homePage();
-				break;
-			default: 
-				System.out.println("Invalid input"); 
-				homePage();
+		try {
+			int choice = sc.nextInt();
+			switch(choice) {
+				case 1: 
+					updateCustomer(c.getUserID()); 
+					t1.run();
+					break;
+				case 2:  
+					t1.run();
+					break;
+				default: 
+					System.out.println(" Invalid input"); 
+			}
+		}catch(InputMismatchException e) {
+			System.out.println("Invalid Input");
+			sc.next();
+			t1.run();
+		}catch(Exception e) {
+			e.printStackTrace();
+			homePage();
 		}
-		
 	}
 
 /*---------------------------------------------------------------------------------------------------------*/	
@@ -739,31 +859,47 @@ public class CustomerService extends UserService{
 		
 		int userID = c.getUserID();
 		int choice = sc.nextInt();
-		
-		switch(choice) {
-			case 1: 
-				getTransaction(userID);
-				homePage();
-				break;
-			case 2:
-				deposit(userID);
-				homePage();
-				break;
-			case 3:
-				withdraw(userID);
-				homePage();
-				break;
-			case 4:
-				transfer(userID);
-				homePage();
-				break;
-			case 5:
-				homePage();
-				break;
-			default: 
-				System.out.println("Invalid input"); 
-				homePage();
+		try {
+			switch(choice) {
+				case 1: 
+					getTransaction(userID);
+					t1.run();
+					break;
+				case 2:
+					deposit(userID);
+					t1.run();
+					break;
+				case 3:
+					withdraw(userID);
+					t1.run();
+					break;
+				case 4:
+					transfer(userID);
+					t1.run();
+					break;
+				case 5:
+					t1.run();
+					break;
+				default: 
+					System.out.println(" Invalid input"); 
+			}
+		}catch(InputMismatchException e) {
+			System.out.println("Invalid Input");
+			sc.next();
+			t1.run();
+		}catch(Exception e) {
+			e.printStackTrace();
+			homePage();
 		}
+	}
+
+/*---------------------------------------------------------------------------------------------------------*/	
+	
+	public void logout() {
+		System.out.println("\n ----------------------------------- \n");
+		System.out.println(" Thank You For Using Revature Bank!");
+		System.out.println("\n ----------------------------------- \n");
+		System.exit(0);
 	}
 	
 /*---------------------------------------------------------------------------------------------------------*/	

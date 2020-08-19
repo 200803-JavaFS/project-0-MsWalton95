@@ -5,17 +5,17 @@ public class Transaction {
 	private String accType;
 	private double amount;
 	private int accID;
-	private long totalBalance;
+	private double totalBalance;
 	
 	public Transaction() {
-		this.transID = transID;
-		this.accType = accType;
-		this.amount = amount;
-		this.accID = accID;
-		this.totalBalance = totalBalance;
+		this.transID = 0;
+		this.accType = null;
+		this.amount = 0;
+		this.accID = 0;
+		this.totalBalance = 0;
 	}
 
-	public Transaction(int transID, String accType, double amount, int accID, long totalBalance) {
+	public Transaction(int transID, String accType, double amount, int accID, double totalBalance) {
 		super();
 		this.transID = transID;
 		this.accType = accType;
@@ -62,13 +62,12 @@ public class Transaction {
 		this.accID = accID;
 	}
 
-	public long getTotalBalance() {
+	public double getTotalBalance() {
 		return totalBalance;
 	}
 
-	public void setTotalBalance(long totalBalance) {
+	public void setTotalBalance(double totalBalance) {
 		this.totalBalance = totalBalance;
-	}
-	
+	}	
 	
 }

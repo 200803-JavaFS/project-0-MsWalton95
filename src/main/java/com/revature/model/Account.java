@@ -1,8 +1,8 @@
 package com.revature.model;
 
 public class Account {
+	private int userID;
 	private int accID;
-	private int accNumber;
 	private String accName;
 	private double balance;
 	private String accType;
@@ -10,7 +10,7 @@ public class Account {
 	
 	public Account() {
 		accID = 0;
-		accNumber = 0;
+		userID = 0;
 		accName = null;
 		balance = 0;
 		accType = null;
@@ -23,20 +23,18 @@ public class Account {
 		this.isApproved = isApproved;
 	}
 
-	public Account(int accID, int accNumber, String accName, double balance, String accType, boolean isApproved) {
+	public Account(int accID, int userID, String accName, double balance, String accType, boolean isApproved) {
 		this.accID = accID;
-		this.accNumber = accNumber;
+		this.userID = userID;
 		this.accName = accName;
 		this.balance = balance;
 		this.accType = accType;
 		this.isApproved = isApproved;
 	}
-	
-	
 
 	@Override
 	public String toString() {
-		return "[Account ID: " + accID + "\t Account Number: " + accNumber + "\t Account Name: " + accName + "\t Balance:" + balance + "\t Account Type:"
+		return "[Customer ID: " + userID + "\t Account ID: " + accID + "\t Account Name: " + accName + "\t Balance: " + balance + "\t Account Type: "
 				+ accType + "\t Approved: " + isApproved + "]";
 	}
 
@@ -48,12 +46,12 @@ public class Account {
 		this.accID = accID;
 	}
 
-	public int getAccNumber() {
-		return accNumber;
+	public int getUserID() {
+		return userID;
 	}
 
-	public void setAccNumber(int accNumber) {
-		this.accNumber = accNumber;
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 
 	public String getAccName() {

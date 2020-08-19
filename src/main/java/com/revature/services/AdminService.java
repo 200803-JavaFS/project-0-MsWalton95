@@ -18,119 +18,193 @@ public class AdminService extends EmployeeService {
 	private static final Logger log = LogManager.getLogger(Admin.class);
 		
 /*---------------------------------------------------------------------------------------------------------*/	
-	//iffy
+	
 	public void updateAccount() {
-		System.out.println("\n" + "-----------------------------------" + "\n");
-		System.out.print(" Please enter customer ID: ");
-		int userID = sc.nextInt();
-		cs.getAccounts(userID);
-		try(Connection conn = ConnectionDAO.connect()){
-			System.out.println("\n ----------------------------------- \n");
-			System.out.print(" Please enter Account Number: ");
-			int accNumber = sc.nextInt();
+		try {
+			System.out.println("\n" + "-----------------------------------" + "\n");
+			System.out.print(" Please enter customer ID: ");
+			int userID = sc.nextInt();
 			
+			cs.getAccounts(userID);
+			
+			System.out.println("\n ----------------------------------- \n");
+			System.out.print(" Please enter Account ID: ");
+			int accID = sc.nextInt();
+				
 			System.out.println("\n ----------------------------------- \n");
 			System.out.println(" 1. Account Name \n 2. Type \n 3. Approved \n 4. Exit");
 			System.out.println("\n ----------------------------------- \n");
-			
 			int choice = sc.nextInt();
-			switch(choice) {
-			case 1: 
-				String sql1 ="UPDATE account SET account_name=? WHERE customer_fk=? AND account_id=?;";
-				psmt = conn.prepareStatement(sql1);
-				System.out.println("\n ----------------------------------- \n");
-				System.out.print(" Update Account Name: ");
-				String accName = sc.nextLine();
-				
-				if(accName.equals("default")) {
-					System.out.println("Cannot change to 'default' account");
-					homePage();
-				}else {
-				psmt.setString(1, accName);
+				switch(choice) {
+				case 1: 
+					updateAccountName(userID, accID);
+					t1.run();
+					break;
+				case 2: 
+					updateAccountType(userID, accID);
+					t1.run();
+					break;
+				case 3: 
+					updateAccountStatus(userID, accID);
+					t1.run();
+					break;
+				default: 
+					System.out.println(" Invalid Input");
+					t1.run();
 				}
-				psmt.setInt(2, userID);
-				psmt.setInt(3, accNumber);
-				psmt.execute();
-				
-				log.info("Account Name Updated");
-				homePage();
-				break;
-			case 2: 
-				String sql2 ="UPDATE account SET account_type=? WHERE customer_fk=? AND account_id=?;";
-				psmt = conn.prepareStatement(sql2);
-				
-				System.out.println("\n ----------------------------------- \n");
-				System.out.print(" Update Account Type \n");
-				System.out.println();
-				System.out.println(" 1. Checking \n 2. Savings \n 3. Exit");
-				System.out.println("\n ----------------------------------- \n");
-					int accType = sc.nextInt();
-					switch(accType) {
-					case 1:
-						psmt.setString(1, "Checkings");
-						cs.getAccounts(userID);
-						homePage();
-						break;
-					case 2:
-						psmt.setString(1, "Savings");
-						cs.getAccounts(userID);
-						homePage();
-						break;
-					default: 
-						System.out.println("Invalid Input");
-						homePage();
-					}
-				psmt.setInt(2, userID);
-				psmt.setInt(3, accNumber);
-				psmt.execute();
-				log.info("Account Type Updated");
-				homePage();
-				break;
-			case 3: 
-				String sql3 ="UPDATE account SET approved=? WHERE customer_fk=? AND account_id=?;";
-				psmt = conn.prepareStatement(sql3);
-				
-				System.out.println("\n ----------------------------------- \n");
-				System.out.print(" Update Account Status \n\n");
-				System.out.println(" 1. Deny \n 2. Approve \n 3. Exit");
-				System.out.println("\n ----------------------------------- \n");
-					int accStatus = sc.nextInt();
-					switch(accStatus) {
-					case 1:
-						psmt.setBoolean(1, false);
-						cs.getAccounts(userID);
-						homePage();
-						break;
-					case 2:
-						psmt.setBoolean(1, true);
-						cs.getAccounts(userID);
-						homePage();
-						break;
-					default: System.out.println("Invalid Input");
-					}
-				psmt.setInt(2, userID);
-				psmt.setInt(3, accNumber);
-				psmt.execute();
-				log.info("Account Status Updated");
-				homePage();
-				break;
-			default: 
-				System.out.println("Invalid Input");
-				homePage();
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}catch(InputMismatchException ex) {
-			System.out.println("Invalid Input");
+		}catch(InputMismatchException e) {
+			System.out.println(" Invalid Input");
+			sc.next();
+			t1.run();
+		}catch(Exception e1) {
+			e1.printStackTrace();
+			homePage();
 		}
 	}
+
+
+/*---------------------------------------------------------------------------------------------------------*/	
+
+	public boolean updateAccountName(int userID, int accID) {
+		try(Connection conn = ConnectionDAO.connect()){
+			String sql1 ="UPDATE account SET account_name=? WHERE customer_fk=? AND account_id=?;";
+			psmt = conn.prepareStatement(sql1);
+			
+			System.out.println("\n ----------------------------------- \n");
+			System.out.print(" Update Account Name: ");
+			sc.nextLine();
+			String accName = sc.nextLine();
+			
+			if(accName.equals("default")) {
+				System.out.println(" Cannot change to 'default' account");
+				t1.run();
+			}else {
+				psmt.setString(1, accName);
+				psmt.setInt(2, userID);
+				psmt.setInt(3, accID);
+				psmt.execute();
+				cs.getAccounts(userID);
+				System.out.println();
+				log.info("Account Name Updated");
+				t1.run();
+			}
+			
+			return true;
+		}catch(InputMismatchException e) {
+			System.out.println(" Invalid Input");
+			sc.next();
+			t1.run();
+		}catch(SQLException e) {
+			System.out.println(" Issue with SQL Connection: " + e);
+			homePage();
+		}catch(Exception e) {
+			e.printStackTrace();
+			homePage();
+		}
+		return false;
+	}
+	
+/*---------------------------------------------------------------------------------------------------------*/			
+	
+	public boolean updateAccountType(int userID, int accID) {
+		try(Connection conn = ConnectionDAO.connect()){
+			String sql ="UPDATE account SET account_type=? WHERE customer_fk=? AND account_id=?;";
+			psmt = conn.prepareStatement(sql);
+			
+			System.out.println("\n ----------------------------------- \n");
+			System.out.print(" Update Account Type \n");
+			System.out.println();
+			System.out.println(" 1. Checking \n 2. Savings \n 3. Exit");
+			System.out.println("\n ----------------------------------- \n");
+			
+			int accType = sc.nextInt();
+			switch(accType) {
+			case 1:
+				psmt.setString(1, "Checkings");
+				break;
+			case 2:
+				psmt.setString(1, "Savings");
+				break;
+			default: 
+				System.out.println(" Invalid Input"); t1.run();
+			}
+			
+			psmt.setInt(2, userID);
+			psmt.setInt(3, accID);
+			psmt.execute();
+			log.info("Account Type Updated");
+			cs.getAccounts(userID);
+			t1.run();
+			return true;
+			
+		}catch(InputMismatchException e) {
+			System.out.println(" Invalid Input");
+			sc.next();
+			t1.run();
+		}catch(SQLException e) {
+			System.out.println(" Issue with SQL Connection: " + e);
+			homePage();
+		}catch(Exception e) {
+			e.printStackTrace();
+			homePage();
+		}
+		return false;
+	}
+
+/*---------------------------------------------------------------------------------------------------------*/			
+	
+	public boolean updateAccountStatus(int userID, int accID) {
+		try(Connection conn = ConnectionDAO.connect()){
+			String sql ="UPDATE account SET approved=? WHERE customer_fk=? AND account_id=?;";
+			psmt = conn.prepareStatement(sql);
+			
+			System.out.println("\n ----------------------------------- \n");
+			System.out.print(" Update Account Status \n\n");
+			System.out.println(" 1. Deny \n 2. Approve \n 3. Exit");
+			System.out.println("\n ----------------------------------- \n");
+			int accStatus = sc.nextInt();
+			switch(accStatus) {
+			case 1:
+				psmt.setBoolean(1, false);
+				break;
+			case 2:
+				psmt.setBoolean(1, true);
+				break;
+			default: 
+				System.out.println(" Invalid Input"); t1.run();
+			}
+			
+			psmt.setInt(2, userID);
+			psmt.setInt(3, accID);
+			psmt.execute();
+			System.out.println();
+			log.info("Account Status Updated");
+			cs.getAccounts(userID);
+			t1.run();
+				
+			return true;
+		}catch(InputMismatchException e) {
+			System.out.println(" Invalid Input");
+			sc.next();
+			t1.run();
+		}catch(SQLException e) {
+			System.out.println(" Issue with SQL Connection: " + e);
+			homePage();
+		}catch(Exception e) {
+			e.printStackTrace();
+			homePage();
+		}
+		return false;
+	}
+
 /*---------------------------------------------------------------------------------------------------------*/	
 	
 	public void updateCustomer() {
 		try(Connection conn = ConnectionDAO.connect()){
-			System.out.println("\n" + "-----------------------------------" + "\n");
-			System.out.print("Please enter customer ID: ");
+			System.out.println("\n ----------------------------------- \n");
+			System.out.print(" Please enter customer ID: ");
 			int userID = sc.nextInt();
+			cs.getCustomer(userID);
 			System.out.println("\n ----------------------------------- \n");
 			System.out.println(" 1. First Name \n 2. Last Name \n 3. Email \n 4. Phone Number \n 5. Password \n 6. Exit");
 			System.out.println("\n ----------------------------------- \n");
@@ -145,6 +219,7 @@ public class AdminService extends EmployeeService {
 				String firstName = sc.next();
 				psmt.setString(1, firstName);
 				
+				System.out.println();
 				log.info("First Name Updated");
 				break;
 			case 2: 
@@ -157,6 +232,7 @@ public class AdminService extends EmployeeService {
 				String lastName = sc.next();
 				psmt.setString(1, lastName);
 				
+				System.out.println();
 				log.info(" Last Name Updated");
 				break;
 			case 3: 
@@ -169,6 +245,7 @@ public class AdminService extends EmployeeService {
 				String email = sc.next();
 				psmt.setString(1, email);
 				
+				System.out.println();
 				log.info("Email Updated");
 				break;
 			case 4: 
@@ -181,6 +258,7 @@ public class AdminService extends EmployeeService {
 				long phone = sc.nextLong();
 				psmt.setLong(1, phone);
 				
+				System.out.println();
 				log.info("Phone Number Updated");
 				break;
 			case 5: 
@@ -193,29 +271,40 @@ public class AdminService extends EmployeeService {
 				String password = sc.next();
 				psmt.setString(1, password);
 				
+				System.out.println();
 				log.info("Password Updated");
 				break;
-			default: 
-				System.out.println("Invalid Input");
+			case 6:
 				homePage();
+				break;
+			default:
+				System.out.println(" Invalid input");
+				t1.run();
 			}
 			
 			psmt.setInt(2, userID);
-	
 			psmt.execute();
-			homePage();
+			t1.run();
+		}catch(InputMismatchException e) {
+			System.out.println(" Invalid Input");
+			sc.next();
+			t1.run();
 		}catch(SQLException e) {
+			System.out.println(" Issue with SQL Connection: " + e);
+			homePage();
+		}catch(Exception e) {
 			e.printStackTrace();
-		}catch(InputMismatchException ex) {
-			System.out.println("Invalid Input");
+			homePage();
 		}
 	}
+
 /*---------------------------------------------------------------------------------------------------------*/	
 	//If customer changed banks or broke rules of using account then cancel account
 	// Any money in bank can either be transfer to new bank or a mailed check
 	public void cancelAccount() {
+		try {
 		System.out.println("\n ----------------------------------- \n");
-		System.out.print("Please enter customer ID: ");
+		System.out.print(" Please enter customer ID: ");
 		int userID = sc.nextInt();
 		System.out.println("\n ----------------------------------- \n");
 		System.out.println(" ARE YOU SURE YOU WANT TO CANCEL?");
@@ -227,26 +316,42 @@ public class AdminService extends EmployeeService {
 		switch(choice) {
 			case 1:
 				try(Connection conn = ConnectionDAO.connect()){
-					String sql ="DELETE FROM account WHERE customer_fk=?; DELETE FROM customer WHERE customer_id=?;";
+					String sql ="DELETE FROM account WHERE customer_fk=?; DELETE FROM transactions WHERE customer_fk=?; "
+							+ "DELETE FROM customer WHERE customer_id=?;";
 				psmt = conn.prepareStatement(sql);
 				
 				psmt.setInt(1, userID);
 				psmt.setInt(2, userID);
+				psmt.setInt(3, userID);
 				
 				psmt.execute();
 				log.info("Account '" + userID + "' was cancelled");
+				t1.start();
+				}catch(SQLException e) {
+					System.out.println(" Issue with SQL Connection: " + e);
+					homePage();
 				}catch(Exception e) {
 					e.printStackTrace();
+					homePage();
 				}
-				homePage();
 				break;
 			default:
-				homePage();
+				System.out.println("Invalid Input");
+				t1.run();
 				break;
 		}
-		
+		}catch(InputMismatchException e) {
+			System.out.println(" Invalid Input");
+			sc.next();
+			t1.run();
+		}catch(Exception e) {
+			e.printStackTrace();
+			homePage();
+		}
 	}
 	
+/*---------------------------------------------------------------------------------------------------------*/	
+//	Login and Options
 /*---------------------------------------------------------------------------------------------------------*/	
 	
 	public void login() {
@@ -260,19 +365,24 @@ public class AdminService extends EmployeeService {
 			String password = sc.next();
 			
 			System.out.println();
-			userLogin(username,password);
+			empLogin(username,password);
 			
 		}catch(InputMismatchException e) {
-			System.out.println("Invalid Input");
-			homePage();
+			System.out.println(" Invalid Input");
+			sc.next();
+			t2.run();
+		}catch(SQLException e) {
+			System.out.println(" Issue with SQL Connection: " + e);
+			signin();
 		}catch(Exception e) {
 			e.printStackTrace();
+			signin();
 		}
 	}
 
 /*---------------------------------------------------------------------------------------------------------*/	
 
-	public Employee userLogin(String username,String password) {	
+	public Employee empLogin(String username,String password) {	
 		try (Connection conn = ConnectionDAO.connect()){
 			String sql = "SELECT * FROM employee WHERE user_name=? AND pass_word=? AND administator=true;";
 			psmt = conn.prepareStatement(sql);
@@ -289,12 +399,16 @@ public class AdminService extends EmployeeService {
 				homePage();
 				return e;
 			}else {
-				System.out.println("Username or password was incorrect");
-				System.exit(0);
+				System.out.println(" Username or password incorrect");
+				t2.run();
 				return null;
 			}
-		}catch(SQLException e){
+		}catch(SQLException e) {
+			System.out.println(" Issue with SQL Connection: " + e);
+			signin();
+		}catch(Exception e) {
 			e.printStackTrace();
+			signin();
 		}
 		return null;		
 	}
@@ -311,6 +425,10 @@ public class AdminService extends EmployeeService {
 			infoOption(choice);
 		}catch(InputMismatchException e) {
 			System.out.println("Invalid Input");
+			sc.next();
+			t1.run();
+		}catch(Exception e) {
+			e.printStackTrace();
 			homePage();
 		}
 	}
@@ -321,25 +439,34 @@ public class AdminService extends EmployeeService {
 		switch(choice) {
 			case 1: 
 				getAllCustomers(); 
-				homePage();
+				t1.run();
 				break;
 			case 2: 
 				System.out.println("\n" + "-----------------------------------" + "\n");
 				System.out.print("Please enter customer ID: ");
-				int userID = sc.nextInt();
-				cs.getCustomer(userID); 
+				try {
+					int userID = sc.nextInt();
+					cs.getCustomer(userID); 
+				}catch(InputMismatchException e) {
+					System.out.println(" Invalid Input");
+					sc.next();
+					t1.run();
+				}catch(Exception e) {
+					e.printStackTrace();
+					homePage();
+				}
 				homePage();
 				break;
 			case 3:
 				updateCustomer();
-				homePage(); 
+				t1.run(); 
 				break;
 			case 4:
 				homePage(); 
 				break;
 			default: 
-				System.out.println("Invalid input"); 
-				homePage();
+				System.out.println(" Invalid input"); 
+				t1.run();
 		}
 	} 
 	
@@ -354,7 +481,11 @@ public class AdminService extends EmployeeService {
 			int choice = sc.nextInt();
 			updateOption(choice);
 		}catch(InputMismatchException e) {
-			System.out.println("Invalid Input");
+			System.out.println(" Invalid Input");
+			sc.next();
+			t1.run();
+		}catch(Exception e) {
+			e.printStackTrace();
 			homePage();
 		}
 	}
@@ -365,26 +496,28 @@ public class AdminService extends EmployeeService {
 		switch(choice) {
 			case 1:
 				updateAccount();
-				homePage();
+				t1.run();
 				break;
 			case 2: 
 				approveAccount();
-				homePage();
+				t1.run();
 				break;
 			case 3: 
 				denyAccount();
-				homePage();
+				t1.run();
 				break;
 			case 4:
 				cancelAccount();
-				homePage(); 
+				t1.run();
 				break;
 			default:
-				homePage();
+				System.out.println(" Invalid Input");
+				t1.run();
 		}
 	}
+
 /*---------------------------------------------------------------------------------------------------------*/	
-	//Optional - Transacation History
+
 	public void customerTrans() {
 		System.out.println("\n ----------------------------------- \n");
 		System.out.println(" 1. View All Customer Transactions \n 2. View Customer Transaction \n"
@@ -395,8 +528,12 @@ public class AdminService extends EmployeeService {
 			int choice = sc.nextInt();
 			transOption(choice);
 		}catch(InputMismatchException e) {
-			System.out.println("Invalid Input");
-			retry();
+			System.out.println(" Invalid Input");
+			sc.next();
+			t1.run();
+		}catch(Exception e) {
+			e.printStackTrace();
+			homePage();
 		}
 	}
 	
@@ -406,33 +543,78 @@ public class AdminService extends EmployeeService {
 		switch(choice) {
 			case 1: 
 				getAllTransactions();
-				homePage();
+				t1.run();
 				break;
 			case 2:
-				System.out.println("\n" + "-----------------------------------" + "\n");
-				System.out.print("Please enter Account Number: ");
-				int accID = sc.nextInt();
-				cs.getTransaction(accID);
-				homePage();
+				System.out.println("\n ----------------------------------- \n");
+				System.out.print(" Please enter Customer ID: ");
+				try {
+				int userID = sc.nextInt();
+				cs.getTransaction(userID);
+				t1.run();
+				}catch(InputMismatchException e) {
+					System.out.println(" Invalid Input");
+					sc.next();
+					t1.run();
+				}catch(Exception e) {
+					e.printStackTrace();
+					homePage();
+				}
 				break;
 			case 3:
-				//cs.deposit(accID);
-				homePage();
+				System.out.println("\n ----------------------------------- \n");
+				System.out.print(" Please enter Customer ID: ");
+				try {
+				int userID2 = sc.nextInt();
+				cs.deposit(userID2);
+				t1.run();
+				}catch(InputMismatchException e) {
+					System.out.println(" Invalid Input");
+					sc.next();
+					t1.run();
+				}catch(Exception e) {
+					e.printStackTrace();
+					homePage();
+				}
 				break;
 			case 4:
-				//cs.withdraw(accID);
-				homePage();
+				System.out.println("\n ----------------------------------- \n");
+				System.out.print(" Please enter Customer ID: ");
+				try {
+				int userID3 = sc.nextInt();
+				cs.withdraw(userID3);
+				t1.run();
+				}catch(InputMismatchException e) {
+					System.out.println(" Invalid Input");
+					sc.next();
+					t1.run();
+				}catch(Exception e) {
+					e.printStackTrace();
+					homePage();
+				}
 				break;
 			case 5:
-				//cs.transfer(accID);
-				homePage();
+				System.out.println("\n ----------------------------------- \n");
+				System.out.print(" Please enter Customer ID: ");
+				try {
+				int userID4 = sc.nextInt();
+				cs.transfer(userID4);
+				t1.run();
+				}catch(InputMismatchException e) {
+					System.out.println(" Invalid Input");
+					sc.next();
+					t1.run();
+				}catch(Exception e) {
+					e.printStackTrace();
+					homePage();
+				}
 				break;
 			case 6: 
 				homePage(); 
 				break;
 			default: 
-				System.out.println("Invalid input"); 
-				homePage();
+				System.out.println(" Invalid input"); 
+				t1.run();
 		}
 	} 
 	

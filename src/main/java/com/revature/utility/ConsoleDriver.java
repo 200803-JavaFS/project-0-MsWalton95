@@ -12,10 +12,23 @@ public class ConsoleDriver {
 	CustomerService c = new CustomerService();
 	EmployeeService e = new EmployeeService();
 	AdminService a = new AdminService();
-	UserService u = new UserService();	
 	//private static final Logger log = LogManager.getLogger(ConsoleDriver.class);
 	Scanner sc = new Scanner(System.in);
-	
+	Thread t1=new Thread(){
+		
+	    public void run(){  
+	    	try{  
+				 System.out.println("\n ----------------------------------- \n");
+				 System.out.println(" Loading Home Page...");
+				 Thread.sleep(1000); 
+				 begin();
+				 
+	        }catch(InterruptedException e){
+	       	 System.out.println(e); 
+	       	 }
+	    }  
+	 };  
+	 
 	public void begin() {
 		System.out.println(
 				" _._._                       _._._ " + "\n" + 
@@ -51,12 +64,14 @@ public class ConsoleDriver {
 				case 3: 
 					a.signin(); break;
 				default: 
-					System.out.println("Wrong input. Try again");
-					System.exit(0);
+					System.out.println(" Wrong input. Try again");
+					t1.run();
 			}
 		}catch(InputMismatchException e) {
-			System.out.println("Invalid Input. Try Again");
-			System.exit(0);
+			System.out.println(" Invalid Input. Try Again");
+			sc.next();
+			t1.run();
+			
 		}
 	}
 }

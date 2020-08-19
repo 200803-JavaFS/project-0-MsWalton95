@@ -9,20 +9,30 @@ DROP FUNCTION get_total() CASCADE;
 
 --------------CUSTOMER--------------
 CREATE TABLE customer (
-	user_name VARCHAR(20) NOT NULL,
-	pass_word VARCHAR(20) NOT NULL,
+	user_name VARCHAR(20),
+	pass_word VARCHAR(20),
 	customer_id SERIAL PRIMARY KEY,
 	first_name VARCHAR(20) NOT NULL,
 	last_name VARCHAR(20) NOT NULL,
 	email VARCHAR(30) NOT NULL UNIQUE,
 	phone_number BIGINT NOT NULL);
 
+
 INSERT INTO customer (user_name, pass_word, first_name, last_name, email, phone_number) VALUES
-('customer1', 'customer1', 'Phoenix', 'Wright', 'naruhodo@aceattorney.com', 5551231234),
+('customer1', 'customer1','Phoenix', 'Wright', 'naruhodo@aceattorney.com', 5551231234),
 ('customer2', 'customer2','Miles', 'Edgeworth', 'mitsurugi@aceattorney.com', 5554561234),
 ('customer3', 'customer3','Maya', 'Fey', 'mediumspirit@aceattorney.com', 5557891234),
 ('customer4', 'customer4','Dick', 'Gumshoe', 'dickgumshoe@aceattorney.com', 5559119997),
-('customer5', 'customer5','Emma', 'Skye', 'emmaskye@aceattorney.com', 5559119997);
+('customer5', 'customer5','Emma', 'Skye', 'emmaskye@aceattorney.com', 5558859115);
+
+
+INSERT INTO customer (first_name, last_name, email, phone_number) VALUES
+('Larry', 'Butz', 'larrybutz@aceattorney.com', 5557728841),
+('Cindy', 'Stone', 'cindystone@aceattorney.com', 5559587153),
+('Mia', 'Fey', 'cindystone@aceattorney.com', 5557539514),
+('Will', 'Power', 'willpower@aceattorney.com', 5559873994),
+('Jack', 'Hammer', 'jackhammer@aceattorney.com', 5559117429);
+
 
 DROP TABLE customer CASCADE;
 
@@ -42,13 +52,26 @@ INSERT INTO account(account_name, balance, account_type, approved, customer_fk) 
 ('default', 5000.00,'Checkings', TRUE, 2),
 ('ascots', 100.00,'Savings', TRUE, 2),
 ('default', 50.00,'Checkings', TRUE, 3),
-('burgers',0.00,'Savings', FALSE, 4),
+('burgers',0.00,'Savings', FALSE, 3),
 ('default', 75.00, 'Checkings', TRUE, 4),
 ('games', 0.00,'Savings', FALSE, 4),
 ('vacation', 0.00,'Savings', FALSE, 4),
 ('new coat', 0.00, 'Savings', FALSE, 4),
 ('default', 50.00,'Checkings', TRUE, 5),
-('science tools', 10.00,'Savings', TRUE, 5);
+('science tools', 10.00, 'Savings', TRUE, 5),
+('default', 100.00,'Checkings', TRUE, 6),
+('art supplies', 0.00,'Savings', FALSE, 6),
+('photography', 0.00,'Savings', FALSE, 6),
+('default', 150.00,'Checkings', TRUE, 7),
+('thinker', 50.00, 'Savings', TRUE, 7),
+('default', 2500.00,'Checkings', TRUE, 8),
+('mystic', 100.00,'Savings', TRUE, 8),
+('default', 4000.00,'Checkings', TRUE, 9),
+('steel samurai', 100.00,'Savings', TRUE, 9),
+('default', 4000.00,'Checkings', TRUE, 10),
+('movies', 200.00, 'Savings', TRUE, 10),
+('vacation', 100.00,'Savings', TRUE, 10),
+('steak', 0.00,'Savings', FALSE, 10),;
 
 DROP TABLE account CASCADE;
 

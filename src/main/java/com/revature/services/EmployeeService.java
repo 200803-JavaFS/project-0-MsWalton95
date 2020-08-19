@@ -45,11 +45,11 @@ public class EmployeeService extends CustomerService implements EmployeeDAO {
 		System.out.println("\n" + "-----------------------------------" + "\n");
 		System.out.print(" Please enter customer ID: ");
 		int userID = sc.nextInt();
-		cs.getOpenAccounts(userID);
+		cs.getPendingAccounts(userID);
 		try(Connection conn = ConnectionDAO.connect()){
 			String sql="DELETE FROM account WHERE account_id=? AND approved=false AND customer_fk=?";
 			psmt = conn.prepareStatement(sql);
-			
+			System.out.println("\n" + "-----------------------------------" + "\n");
 			System.out.print(" Please enter account ID: ");
 			int accID = sc.nextInt();
 			psmt.setInt(1, accID);
@@ -79,7 +79,7 @@ public class EmployeeService extends CustomerService implements EmployeeDAO {
 		System.out.println("\n" + "-----------------------------------" + "\n");
 		System.out.print(" Please enter customer ID: ");
 		int userID = sc.nextInt();
-		cs.getOpenAccounts(userID);
+		cs.getPendingAccounts(userID);
 		try(Connection conn = ConnectionDAO.connect()){
 			String sql="UPDATE account SET approved=true WHERE account_id=? AND approved=false AND customer_fk=?;";
 			psmt = conn.prepareStatement(sql);
@@ -122,11 +122,12 @@ public class EmployeeService extends CustomerService implements EmployeeDAO {
 			System.out.println("\n ----------------------------------- \n");
 			
 			while(rs.next()) {
-				t.setAccID(rs.getInt("customer_fk"));
+				t.setUserID(rs.getInt("customer_fk"));
 				t.setAccType(rs.getString("transaction_type"));
 				t.setAmount(rs.getInt("transaction_amount"));
 				t.setTotalBalance(rs.getLong("total_balance"));
 				t.setTransID(rs.getInt("transaction_id"));
+				t.setTimestamp(rs.getTimestamp("updated_time"));
 				
 				transactions.add(t);
 				System.out.println(t);
@@ -142,6 +143,7 @@ public class EmployeeService extends CustomerService implements EmployeeDAO {
 			e.printStackTrace();
 			homePage();
 		}
+		System.out.println("No transactions have been made...");
 		return null;
 	}
  
@@ -252,6 +254,7 @@ public class EmployeeService extends CustomerService implements EmployeeDAO {
 			e.printStackTrace();
 			homePage();
 		}
+		System.out.println("No pending accounts...");
 		return null;
 	}
 	
@@ -304,7 +307,7 @@ public class EmployeeService extends CustomerService implements EmployeeDAO {
 		}catch(InputMismatchException e) {
 			System.out.println(" Invalid Input");
 			sc.next();
-			t2.start();
+			t2.run();
 		}catch(Exception e) {
 			e.printStackTrace();
 			signin();
@@ -317,7 +320,7 @@ public class EmployeeService extends CustomerService implements EmployeeDAO {
 		switch(choice) {
 			case 1: login();break;
 			case 2: logout();break;
-			default: System.out.println(" Invalid Input"); t2.start();
+			default: System.out.println(" Invalid Input"); t2.run();
 		}
 	}	
 	
@@ -326,11 +329,11 @@ public class EmployeeService extends CustomerService implements EmployeeDAO {
 	public void login() {
 		System.out.println("\n ----------------------------------- \n");
 		try(Connection conn = ConnectionDAO.connect()) {
-			System.out.println("EMPLOYEE LOGIN \n");
-			System.out.print("Username: ");
+			System.out.println(" EMPLOYEE LOGIN \n");
+			System.out.print(" Username: ");
 			String username = sc.next();
 			
-			System.out.print("Password: ");
+			System.out.print(" Password: ");
 			String password = sc.next();
 			
 			System.out.println();
@@ -338,7 +341,7 @@ public class EmployeeService extends CustomerService implements EmployeeDAO {
 		}catch(InputMismatchException e) {
 			System.out.println(" Invalid Input");
 			sc.next();
-			t2.start();
+			t2.run();
 		}catch(Exception e) {
 			e.printStackTrace();
 			signin();
@@ -747,12 +750,5 @@ public class EmployeeService extends CustomerService implements EmployeeDAO {
 	
 /*---------------------------------------------------------------------------------------------------------*/	
 
-
-	
-/*---------------------------------------------------------------------------------------------------------*/	
-
-	
-	
-/*---------------------------------------------------------------------------------------------------------*/	
 
 }

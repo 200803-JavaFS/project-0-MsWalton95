@@ -3,16 +3,20 @@ package com.revature.utility;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import com.revature.dao.AdminDAO;
+import com.revature.dao.CustomerDAO;
+import com.revature.dao.EmployeeDAO;
+
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
 
 import com.revature.services.*;
 
 public class ConsoleDriver {
-	CustomerService c = new CustomerService();
-	EmployeeService e = new EmployeeService();
-	AdminService a = new AdminService();
-	//private static final Logger log = LogManager.getLogger(ConsoleDriver.class);
+	CustomerDAO c = new CustomerService();
+	EmployeeDAO e = new EmployeeService();
+	AdminDAO a = new AdminService();
+	
 	Scanner sc = new Scanner(System.in);
 	Thread t1=new Thread(){
 		

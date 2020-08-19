@@ -10,6 +10,12 @@ public interface AdminDAO {
 			
 	public void updateAccount();
 	
+	public boolean updateAccountName(int userID, int accID);
+	
+	public boolean updateAccountType(int userID, int accID);
+	
+	public boolean updateAccountStatus(int userID, int accID);
+	
 	public void updateCustomer();
 	
 	public void cancelAccount();
@@ -17,10 +23,11 @@ public interface AdminDAO {
 /*---------------------------------------------------------------------------------------------------------*/	
 //	Login and Options
 /*---------------------------------------------------------------------------------------------------------*/	
+	public void signin();
 	
 	public void login();
 	
-	public Employee userLogin(String username,String password);
+	public Employee empLogin(String username,String password);
 	
 	public void customerInfo();
 	

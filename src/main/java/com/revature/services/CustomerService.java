@@ -13,10 +13,11 @@ import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.revature.dao.CustomerDAO;
 import com.revature.model.*;
 import com.revature.utility.ConnectionDAO;
 
-public class CustomerService extends Thread{
+public class CustomerService extends Thread implements CustomerDAO{
 	Account a = new Account();
 	Customer c = new Customer();
 	Transaction t = new Transaction();
@@ -44,7 +45,7 @@ public class CustomerService extends Thread{
 			double balance = a.getBalance();
 			System.out.println("\n ----------------------------------- \n");
 			System.out.print(" Enter the amount to withdraw: ");
-			int money = sc.nextInt();
+			double money = sc.nextDouble();
 		
 			String sql = "UPDATE account SET balance=balance-? WHERE customer_fk=? AND account_id=?;";
 			psmt = conn.prepareStatement(sql);
@@ -59,7 +60,7 @@ public class CustomerService extends Thread{
 				System.out.println("\n Withdrawn cannot be a negative value");
 				t1.run();
 			}else {
-				psmt.setInt(1, money);
+				psmt.setDouble(1, money);
 				psmt.setInt(2, userID);
 				psmt.setInt(3, accID);
 				
@@ -82,6 +83,7 @@ public class CustomerService extends Thread{
 			e.printStackTrace();
 			homePage();
 		}
+		System.out.println("Issue with the transaction");
 		return false;
 	}
 
@@ -98,7 +100,7 @@ public class CustomerService extends Thread{
 			getAccount(userID, accID);
 			System.out.println("\n ----------------------------------- \n");
 			System.out.print(" Enter the amount to deposit: ");
-			int money = sc.nextInt();
+			double money = sc.nextDouble();
 		
 			String sql = "UPDATE account SET balance=balance+? WHERE customer_fk=? AND account_id=?;";
 			psmt = conn.prepareStatement(sql);
@@ -120,16 +122,17 @@ public class CustomerService extends Thread{
 				return true;
 			}
 		}catch(InputMismatchException e) {
-			System.out.println("Invalid Input");
+			System.out.println("\n Invalid Input");
 			sc.next();
 			t1.run();
 		}catch(SQLException e) {
-			System.out.println("Issue with SQL Connection: " + e);
+			System.out.println(" Issue with SQL Connection: " + e);
 			t1.run();
 		}catch(Exception e) {
 			e.printStackTrace();
 			homePage();
 		}
+		System.out.println(" Issue with the transaction");
 		return false;
 	}
 		
@@ -150,7 +153,7 @@ public class CustomerService extends Thread{
 			int accNum2 = sc.nextInt();
 
 			System.out.print(" What is the amount to transfer? ");
-			int money = sc.nextInt();
+			double money = sc.nextInt();
 		
 		
 			String sql = "UPDATE account SET balance=balance-? WHERE customer_fk=? AND account_id=?;" + 
@@ -164,10 +167,10 @@ public class CustomerService extends Thread{
 				System.out.println("\n Transfer cannot be a negative value");
 				t1.run();
 			}else {
-			psmt.setInt(1, money);
+			psmt.setDouble(1, money);
 			psmt.setInt(2, userID);
 			psmt.setInt(3, accNum);
-			psmt.setInt(4, money);
+			psmt.setDouble(4, money);
 			psmt.setInt(5, userID);
 			psmt.setInt(6, accNum2);
 			
@@ -176,7 +179,7 @@ public class CustomerService extends Thread{
 			System.out.println();
 			log.info("Transfer complete");
 			getAccounts(userID);
-			t1.start();
+			t1.run();
 			return true;
 			}
 		}catch(InputMismatchException e) {
@@ -190,12 +193,13 @@ public class CustomerService extends Thread{
 			e.printStackTrace();
 			homePage();
 		}
+		System.out.println("Issue with the transaction");
 		return false;
 	}
 		
 /*---------------------------------------------------------------------------------------------------------*/	
 	
-	public boolean getTotal(int userID,String accType, int money) {
+	public boolean getTotal(int userID,String accType, double money) {
 		try(Connection conn = ConnectionDAO.connect()){
 			String sql="CREATE OR REPLACE FUNCTION get_total() RETURNS NUMERIC\r\n" + 
 					"AS $$ \r\n" + 
@@ -275,7 +279,7 @@ public class CustomerService extends Thread{
 
 				System.out.println(a);
 			}else {
-				System.out.println("That is the incorrect account number");
+				System.out.println("That is the incorrect Account ID");
 				t1.run();
 				}
 		return a;
@@ -286,6 +290,41 @@ public class CustomerService extends Thread{
 			e.printStackTrace();
 			homePage();
 		}
+		return null;
+	}
+	
+/*---------------------------------------------------------------------------------------------------------*/	
+	
+	public List <Transaction> getRecentTransaction(int userID) {
+		try(Connection conn = ConnectionDAO.connect()){
+			String sql="SELECT * FROM transactions WHERE customer_fk=? ORDER BY transaction_id DESC LIMIT 5";
+			psmt = conn.prepareStatement(sql);
+			
+			System.out.println("\n ----------------------------------- \n");
+			psmt.setInt(1, userID);
+			List<Transaction> transactions = new ArrayList<Transaction>();
+			
+			ResultSet rs = psmt.executeQuery();
+			while(rs.next()) {
+				t.setUserID(userID);
+				t.setAccType(rs.getString("transaction_type"));
+				t.setAmount(rs.getInt("transaction_amount"));
+				t.setTotalBalance(rs.getLong("total_balance"));
+				t.setTransID(rs.getInt("transaction_id"));
+				t.setTimestamp(rs.getTimestamp("updated_time"));
+				
+				transactions.add(t);
+				System.out.println(t);
+			}
+			return transactions;
+		}catch(SQLException e) {
+			System.out.println("Issue with SQL Connection: " + e);
+			homePage();
+		}catch(Exception e) {
+			e.printStackTrace();
+			homePage();
+		}
+		System.out.println("No transactions have been made...");
 		return null;
 	}
 	
@@ -302,11 +341,12 @@ public class CustomerService extends Thread{
 			
 			ResultSet rs = psmt.executeQuery();
 			while(rs.next()) {
-				t.setAccID(userID);
+				t.setUserID(userID);
 				t.setAccType(rs.getString("transaction_type"));
 				t.setAmount(rs.getInt("transaction_amount"));
 				t.setTotalBalance(rs.getLong("total_balance"));
 				t.setTransID(rs.getInt("transaction_id"));
+				t.setTimestamp(rs.getTimestamp("updated_time"));
 				
 				transactions.add(t);
 				System.out.println(t);
@@ -319,6 +359,7 @@ public class CustomerService extends Thread{
 			e.printStackTrace();
 			homePage();
 		}
+		System.out.println("No transactions have been made...");
 		return null;
 	}
 	
@@ -392,6 +433,7 @@ public class CustomerService extends Thread{
 			e.printStackTrace();
 			homePage();
 		}
+		System.out.println("No peneding accounts...");
 		return null;
 	}	
 
@@ -542,6 +584,7 @@ public class CustomerService extends Thread{
 			e.printStackTrace();
 			signin();
 		}
+		System.out.println("Issue with registering...");
 		return false;
 	}
 	
@@ -610,6 +653,7 @@ public class CustomerService extends Thread{
 			e.printStackTrace();
 			signin();
 		}
+		System.out.println("Issue creating new account...");
 		return false;
 	}
 	
@@ -617,14 +661,21 @@ public class CustomerService extends Thread{
 	
 	public boolean createAccountInfo(int userID, String fullName, String username, String password) {
 		try(Connection conn = ConnectionDAO.connect()){
-			String sql = "INSERT INTO account(account_name, balance, account_type, approved, customer_fk) VALUES(?,?,?,?,?);";
+			String sql = "INSERT INTO account(account_name, balance, account_type, approved, customer_fk) VALUES(?,?,?,?,?);"+
+					"INSERT INTO account(account_name, balance, account_type, approved, customer_fk) VALUES(?,?,?,?,?);";
 			psmt = conn.prepareStatement(sql);
 			
 			psmt.setString(1, "default");
-			psmt.setDouble(2, 0.00);
+			psmt.setDouble(2, 0.01);
 			psmt.setString(3, "Checkings");
-			psmt.setBoolean(4, false);
+			psmt.setBoolean(4, true);
 			psmt.setInt(5, userID);
+			
+			psmt.setString(6, "default");
+			psmt.setDouble(7, 0.01);
+			psmt.setString(8, "Savings");
+			psmt.setBoolean(9, true);
+			psmt.setInt(10, userID);
 			
 			psmt.execute();
 			
@@ -636,12 +687,13 @@ public class CustomerService extends Thread{
 			homePage();
 			return true;
 		}catch(SQLException e) {
-			System.out.println("Issue with SQL Connection: " + e);
+			System.out.println(" Issue with SQL Connection: " + e);
 			signin();
 		}catch(Exception e) {
 			e.printStackTrace();
 			signin();
 		}
+		System.out.println(" Issue creating new account...");
 		return false;
 	}
 
@@ -702,7 +754,7 @@ public class CustomerService extends Thread{
 					t2.run();
 			}
 		}catch(InputMismatchException e) {
-			System.out.println("Invalid Input");
+			System.out.println(" Invalid Input");
 			sc.next();
 			t2.run();
 		}catch(Exception e) {
@@ -731,7 +783,7 @@ public class CustomerService extends Thread{
 			sc.next();
 			t2.run();
 		}catch(SQLException e) {
-			System.out.println("Issue with SQL Connection: " + e);
+			System.out.println(" Issue with SQL Connection: " + e);
 			signin();
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -805,7 +857,7 @@ public class CustomerService extends Thread{
 				infoOption();
 				break;
 			case 2: 
-				getTransaction(c.getUserID());
+				getRecentTransaction(c.getUserID());
 				transOption();
 				break;
 			case 3: 

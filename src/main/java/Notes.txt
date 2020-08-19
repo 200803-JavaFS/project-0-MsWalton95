@@ -23,11 +23,7 @@ Under Transaction -> Transaction History, Deposit, Withdraw, Transfer
 
 NEED FIX
 --------
-RETRY OPTION
-ADD TIMESTAMP
-TRANSACTION HISTORY
-COMMIT/ROLLBACK - UPDATES/ DEPOSIT/WITHDRAW/TRANSFER
-TRIGGER- CREATE
+UPDATE PASSWORD -> DETECT SAME PASSWORD
 
 --------------------------------------
 --------------Employee----------------
@@ -90,10 +86,4 @@ LAYOUT
 NEED FIX
 --------
 
-ACCOUNT->
-EMPLOYEE -> ADMIN
-USER SERVICE
-EMPLOYEE
-ADMIN
-CUSTOMER
-ACCOUNT
+CREATE ACCOUNT -> ADD ACCOUNT

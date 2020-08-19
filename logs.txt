@@ -191,3 +191,42 @@ Retrieve All Pending Accounts
 2020-08-18 21:46:51 INFO  CustomerService:180 - Transfer complete
 2020-08-18 21:52:56 INFO  CustomerService:176 - Transfer complete
 2020-08-18 21:56:11 INFO  CustomerService:117 - Deposit complete
+2020-08-18 22:24:58 INFO  CustomerService:458 - Email Updated
+2020-08-18 22:25:15 INFO  CustomerService:470 - Phone Number Updated
+2020-08-18 22:25:35 INFO  CustomerService:482 - Password Updated
+2020-08-18 22:34:35 INFO  CustomerService:118 - Deposit complete
+2020-08-18 23:04:39 INFO  Driver:136 - Retrieve All Transaction History
+2020-08-18 23:07:30 INFO  CustomerService:493 - Email Updated
+2020-08-18 23:07:46 INFO  CustomerService:505 - Phone Number Updated
+2020-08-18 23:10:38 INFO  CustomerService:517 - Password Updated
+2020-08-18 23:12:09 INFO  CustomerService:118 - Deposit complete
+2020-08-18 23:12:33 INFO  CustomerService:70 - Withdrawn complete
+2020-08-18 23:14:23 INFO  CustomerService:178 - Transfer complete
+2020-08-18 23:44:33 INFO  CustomerService:499 - Email Updated
+2020-08-18 23:49:57 INFO  CustomerService:499 - Email Updated
+2020-08-18 23:50:56 INFO  CustomerService:511 - Phone Number Updated
+2020-08-18 23:51:11 INFO  CustomerService:523 - Password Updated
+2020-08-19 00:00:33 INFO  CustomerService:119 - Deposit complete
+2020-08-19 00:01:42 INFO  CustomerService:70 - Withdrawn complete
+2020-08-19 00:07:06 INFO  CustomerService:571 - New login account created
+2020-08-19 00:23:48 INFO  Driver:175 - Retrieve All Customer Information
+2020-08-19 00:24:17 INFO  Driver:212 - Retrieve All Account information
+2020-08-19 00:24:25 INFO  Driver:248 - Retrieve All Pending Accounts Information
+2020-08-19 00:24:34 INFO  Driver:284 - Retrieve All Open Accounts Information
+2020-08-19 00:25:43 INFO  Driver:136 - Retrieve All Transaction History
+2020-08-19 00:26:21 INFO  Driver:248 - Retrieve All Pending Accounts Information
+2020-08-19 00:29:00 INFO  Driver:60 - Account '56' has been denied
+2020-08-19 00:29:21 INFO  Driver:248 - Retrieve All Pending Accounts Information
+2020-08-19 00:30:03 INFO  Driver:94 - Account '38' has been approved
+2020-08-19 00:30:31 INFO  Driver:248 - Retrieve All Pending Accounts Information
+2020-08-19 00:34:50 INFO  Driver:175 - Retrieve All Customer Information
+2020-08-19 00:35:19 INFO  Driver:212 - Retrieve All Account information
+2020-08-19 00:35:58 INFO  Admin:223 - First Name Updated
+2020-08-19 00:36:18 INFO  Admin:236 -  Last Name Updated
+2020-08-19 00:39:58 INFO  Admin:249 - Email Updated
+2020-08-19 00:40:24 INFO  Admin:262 - Phone Number Updated
+2020-08-19 00:40:47 INFO  Admin:275 - Password Updated
+2020-08-19 00:41:58 INFO  Driver:136 - Retrieve All Transaction History
+2020-08-19 00:43:51 INFO  CustomerService:119 - Deposit complete
+2020-08-19 00:44:58 INFO  CustomerService:70 - Withdrawn complete
+2020-08-19 00:56:02 INFO  CustomerService:683 - New account created

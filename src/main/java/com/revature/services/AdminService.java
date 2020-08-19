@@ -8,11 +8,13 @@ import java.util.InputMismatchException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.revature.dao.AdminDAO;
+import com.revature.model.Account;
 import com.revature.model.Admin;
 import com.revature.model.Employee;
 import com.revature.utility.ConnectionDAO;
 
-public class AdminService extends EmployeeService {
+public class AdminService extends EmployeeService implements AdminDAO {
 	Admin a = new Admin();
 	
 	private static final Logger log = LogManager.getLogger(Admin.class);
@@ -61,7 +63,6 @@ public class AdminService extends EmployeeService {
 			homePage();
 		}
 	}
-
 
 /*---------------------------------------------------------------------------------------------------------*/	
 
@@ -326,7 +327,7 @@ public class AdminService extends EmployeeService {
 				
 				psmt.execute();
 				log.info("Account '" + userID + "' was cancelled");
-				t1.start();
+				t1.run();
 				}catch(SQLException e) {
 					System.out.println(" Issue with SQL Connection: " + e);
 					homePage();
@@ -351,9 +352,34 @@ public class AdminService extends EmployeeService {
 	}
 	
 /*---------------------------------------------------------------------------------------------------------*/	
+	
+	public Account getAccount(int userID, int accID) {	
+		return super.getAccount(userID, accID);
+	}
+	
+/*---------------------------------------------------------------------------------------------------------*/	
 //	Login and Options
 /*---------------------------------------------------------------------------------------------------------*/	
 	
+	public void signin() {
+		System.out.println("\n ----------------------------------- \n");
+		System.out.println(" 1. Log in \t 2. Exit");
+		System.out.println("\n ----------------------------------- \n");
+		try {
+		int choice = sc.nextInt();
+		option(choice);
+		}catch(InputMismatchException e) {
+			System.out.println(" Invalid Input");
+			sc.next();
+			t2.run();
+		}catch(Exception e) {
+			e.printStackTrace();
+			signin();
+		}
+	}
+	
+/*---------------------------------------------------------------------------------------------------------*/	
+
 	public void login() {
 		System.out.println("\n ----------------------------------- \n");
 		try(Connection conn = ConnectionDAO.connect()) {

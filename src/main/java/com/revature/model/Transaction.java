@@ -1,33 +1,37 @@
 package com.revature.model;
 
+import java.sql.Timestamp;
+
 public class Transaction {
 	private int transID;
 	private String accType;
 	private double amount;
-	private int accID;
+	private int userID;
 	private double totalBalance;
-	
+	private Timestamp timeStamp;
+
 	public Transaction() {
 		this.transID = 0;
 		this.accType = null;
 		this.amount = 0;
-		this.accID = 0;
+		this.userID = 0;
 		this.totalBalance = 0;
+		this.timeStamp = null;
 	}
 
-	public Transaction(int transID, String accType, double amount, int accID, double totalBalance) {
-		super();
+	public Transaction(int transID, String accType, double amount, int accID, double totalBalance, Timestamp timeStamp) {
 		this.transID = transID;
 		this.accType = accType;
 		this.amount = amount;
-		this.accID = accID;
+		this.userID = accID;
 		this.totalBalance = totalBalance;
+		this.timeStamp = timeStamp;
 	}
 
 	@Override
 	public String toString() {
-		return "[Transaction ID: " + transID + "\t Account Type: " + accType + "\t Amount: " + amount + "\t Account ID: " + accID
-				+ "\t Total Balance: " + totalBalance + "]";
+		return "[Transaction ID: " + transID + "\t Account Type: " + accType + "\t Amount: " + amount
+				+ "\t Total Balance: " + totalBalance +  "\t Customer ID: " + userID + "\t Date: "+ timeStamp+"]";
 	}
 
 	public int getTransID() {
@@ -54,12 +58,12 @@ public class Transaction {
 		this.amount = amount;
 	}
 
-	public int getAccID() {
-		return accID;
+	public int getUserID() {
+		return userID;
 	}
 
-	public void setAccID(int accID) {
-		this.accID = accID;
+	public void setUserID(int userID) {
+		this.userID = userID;
 	}
 
 	public double getTotalBalance() {
@@ -69,5 +73,13 @@ public class Transaction {
 	public void setTotalBalance(double totalBalance) {
 		this.totalBalance = totalBalance;
 	}	
+	
+	public Timestamp getTimestamp() {
+		return timeStamp;
+	}
+
+	public void setTimestamp(Timestamp timestamp) {
+		this.timeStamp = timestamp;
+	}
 	
 }

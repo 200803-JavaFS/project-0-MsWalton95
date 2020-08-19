@@ -18,7 +18,7 @@ public interface CustomerDAO {
 	
 	public boolean transfer(int userID);
 	
-	public boolean getTotal(int userID,String accType, int money);
+	public boolean getTotal(int userID,String accType, double money);
 	
 /*---------------------------------------------------------------------------------------------------------*/	
 //	Retrieve Information
@@ -27,6 +27,8 @@ public interface CustomerDAO {
 	public Customer getCustomer(int userID);
 	
 	public Account getAccount(int userID, int accID);
+	
+	public List<Transaction> getRecentTransaction(int userID);
 	
 	public List<Transaction> getTransaction(int userID);
 	
@@ -65,5 +67,7 @@ public interface CustomerDAO {
 	public void infoOption();
 	
 	public void transOption();
+	
+	public void logout();
 
 }
